@@ -1,0 +1,59 @@
+# Artifact for Safety Verification of Declarative Smart Contracts
+
+This artifact contains the benchmarks, binaries, and scripts to reproduce the 
+to reproduce the experimental results of the corresponding paper (Table 2).
+
+The artifact has been tested on the TACAS 2023 Artifact Evaluation Virtual
+Machine for VirtualBox [available via
+Zenodo](https://doi.org/10.5281/zenodo.7113223).
+
+## EXPERIMENT RUNTIME
+The expected runtime is 11 hours with single thread, 
+and 1.5 hour with 10 threads.
+
+## REPRODUCIBILITY INSTRUCTIONS
+1. Download and extract the artifact file
+2. `` cd dcv-tacas23-artifcat ``
+3. Install dependent software from local packages: ``sudo ./install.sh `` 
+4. Set environment variables: ``source ./setup.sh``.
+5. Run all experiments: `` ./run.sh 3600 1``
+The first parameter is the timeout (in seconds), 
+    the second parameter is the thread, which should be the minimum
+    of 10 and the number of idle CPU threads on the machine.
+
+The results are written to the ``output`` directory,
+which has sub-directories ``dcv``, ``solc/reference``, ``solc/decon``, 
+``solc-verify/reference``, and ``solc-verify/decon``.
+Each directory contains the results for the corresponding columns in Table 2.
+The verifier output and verification time for each benchmark contract
+is written to a separate log file.
+
+## Expected output
+
+For DCV output, it is expected to have all benchmark verification results
+returning ``Init: UNSATISFIABLE`` and ``Tr: UNSATISFIABLE``,
+which means the safety verification is successful.
+
+For solc, the verifier may return 
+1. ``Warning: CHC: Assertion violation might happen here.``,
+which means that it cannot verify the assertion,
+which is the unknown in Table 2.
+2. If its time exceeds the timeout parameter, it is marked as timeout in Table 2.
+3. Some may return
+``Warning: CHC: Error trying to invoke SMT solver``,
+which is reported as error in Table 2.
+4. Otherwise, the verification succeeds, and the time is reported in Table 2.
+
+For solc-verify, it may return
+1. ``Invariant [...] might not hold when entering function.``
+This also means the assertion cannot be verified,
+and is reported as unknown in Table 2.
+2. Similarly, time exceeding timeout parameter would be reported as timeout
+instead.
+3. Some contracts may return 
+``solc-verify error: Error(s) while translating annotation for node``,
+which is reported as error in Table 2.
+4. Otherwise, the verification succeeds, and the time is reported in Table 2.
+
+
+
