@@ -15,7 +15,9 @@ and 1.5 hour with 10 threads.
 1. Download and extract the artifact file
 2. `` cd dcv-tacas23-artifcat ``
 3. Install dependent software from local packages: ``sudo ./install.sh `` 
-4. Set environment variables: ``source ./setup.sh``.
+This only needs to run once.
+4. Set environment variables: ``source ./setup.sh``. This needs to be 
+run on every reboot.
 5. Run all experiments: `` ./run.sh 3600 1``
 The first parameter is the timeout (in seconds), 
     the second parameter is the thread, which should be the minimum
@@ -34,26 +36,26 @@ For DCV output, it is expected to have all benchmark verification results
 returning ``Init: UNSATISFIABLE`` and ``Tr: UNSATISFIABLE``,
 which means the safety verification is successful.
 
-For solc, the verifier may return 
-1. ``Warning: CHC: Assertion violation might happen here.``,
+For solc, the output could be one of the following:
+* ``Warning: CHC: Assertion violation might happen here.``,
 which means that it cannot verify the assertion,
 which is the unknown in Table 2.
-2. If its time exceeds the timeout parameter, it is marked as timeout in Table 2.
-3. Some may return
+* If its time exceeds the timeout parameter, it is marked as timeout in Table 2.
+* Some may return
 ``Warning: CHC: Error trying to invoke SMT solver``,
 which is reported as error in Table 2.
-4. Otherwise, the verification succeeds, and the time is reported in Table 2.
+* Otherwise, the verification succeeds, and the time is reported in Table 2.
 
-For solc-verify, it may return
-1. ``Invariant [...] might not hold when entering function.``
+For solc-verify, the output could be one of the following:
+* ``Invariant [...] might not hold when entering function.``
 This also means the assertion cannot be verified,
 and is reported as unknown in Table 2.
-2. Similarly, time exceeding timeout parameter would be reported as timeout
+* Similarly, time exceeding timeout parameter would be reported as timeout
 instead.
-3. Some contracts may return 
+* Some contracts may return 
 ``solc-verify error: Error(s) while translating annotation for node``,
 which is reported as error in Table 2.
-4. Otherwise, the verification succeeds, and the time is reported in Table 2.
+* Otherwise, the verification succeeds, and the time is reported in Table 2.
 
 
 
