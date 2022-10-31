@@ -12,6 +12,11 @@ The expected runtime is 11 hours with single thread,
 and 1.5 hour with 10 threads.
 
 ## REPRODUCIBILITY INSTRUCTIONS
+
+The results reported in Table 2 in the paper is collected from a server
+with 125GB memory. Smaller memory size may impact the run time of verification 
+tasks.
+
 1. Download and extract the artifact file
 2. `` cd dcv-tacas23-artifcat ``
 3. Install dependent software from local packages: ``sudo ./install.sh `` 
