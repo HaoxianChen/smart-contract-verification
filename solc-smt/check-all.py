@@ -7,16 +7,27 @@ import sys
 from multiprocessing import Pool
 
 all_contracts = [
-        "wallet.sol",
+        # "wallet.sol",
         "crowFunding.sol",
-        "erc20.sol",
-        "erc721.sol",
-        "erc777.sol",
-        "erc1155.sol",
-        "paymentSplitter.sol",
-        "vestingWallet.sol",
-        "voting.sol",
-        "auction.sol"
+        # "erc20.sol",
+        # "erc721.sol",
+        # "erc777.sol",
+        # "erc1155.sol",
+        # "paymentSplitter.sol",
+        # "vestingWallet.sol",
+        # "voting.sol",
+        # "auction.sol",
+        # New benchmarks
+        # "ltcSwapAsset.sol",
+        # "tether.sol", 
+        # "bnb.sol",
+        # "linktoken.sol", 
+        # "matic.sol",
+        # "shib.sol", 
+        # "theta.sol",
+        # "wbtc.sol",
+        # "controllable.sol",
+        # "tokenPartition.sol"
         ]
 
 def test(contract_name, _bin, timeout, benchmark_dir, out_dir):
