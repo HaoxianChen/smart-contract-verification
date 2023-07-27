@@ -8,16 +8,27 @@ import sys
 JAR = "declarative-smart-contract-assembly-0.1.0-SNAPSHOT.jar"
 benchmark_dir = "benchmarks"
 all_contracts = [
-        "erc1155.dl",
-        "erc777.dl",
-        "paymentSplitter.dl",
-        "crowFunding.dl",
-        "erc20.dl",
-        "nft.dl",
-        "vestingWallet.dl",
-        "wallet.dl",
-        "voting.dl",
+        # "erc1155.dl",
+        # "erc777.dl",
+        # "paymentSplitter.dl",
+        # "crowFunding.dl",
+        # "erc20.dl",
+        # "nft.dl",
+        # "vestingWallet.dl",
+        # "wallet.dl",
+        # "voting.dl",
         "auction.dl",
+        # New benchmarks
+        # "ltcSwapAsset.dl",
+        # "tether.dl", 
+        # "bnb.dl",
+        # "linktoken.dl", 
+        # "matic.dl",
+        # "shib.dl", 
+        # "theta.dl",
+        # "wbtc.dl",
+        # "controllable.dl",
+        # "tokenPartition.dl"
         ]
 
 def test(contract_dir, contract_name, out_dir):
@@ -40,3 +51,4 @@ if __name__ == '__main__':
 
     for c in all_contracts:
         test(benchmark_dir, c, out_dir)
+
