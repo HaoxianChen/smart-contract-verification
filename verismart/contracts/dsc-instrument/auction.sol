@@ -12,11 +12,11 @@ contract Auction {
     bool _valid;
   }
   struct BeneficiaryTuple {
-    address p;
+    address payable p;
     bool _valid;
   }
   struct HighestBidTuple {
-    address bidder;
+    address payable bidder;
     uint amount;
     bool _valid;
   }
@@ -48,7 +48,7 @@ contract Auction {
   event Send(address p,uint amount);
   event Bid(address bidder,uint amount);
   event End(bool b);
-  constructor(address beneficiary,uint biddingTime) public {
+  constructor(address payable beneficiary,uint biddingTime) public {
     updateEndTimeOnInsertConstructor_r12(biddingTime);
     updateOwnerOnInsertConstructor_r8();
     updateBeneficiaryOnInsertConstructor_r9(beneficiary);
@@ -103,7 +103,7 @@ contract Auction {
             if(true) {
               uint n = msg.value;
               if(true) {
-                address p = msg.sender;
+                address payable p = msg.sender;
                 if(n>m && t1<t2) {
                   updateHighestBidOnInsertBid_r0(p,n);
                   updateBidTotalOnInsertBid_r10(p,n);
@@ -117,7 +117,7 @@ contract Auction {
       }
       return false;
   }
-  function updateHighestBidOnInsertBid_r0(address p,uint m) private    {
+  function updateHighestBidOnInsertBid_r0(address payable p,uint m) private    {
       HighestBidTuple memory highestBidTuple = highestBid;
       uint _max = highestBid.amount;
       if(m>_max) {
@@ -130,14 +130,14 @@ contract Auction {
         if(true) {
           address s = msg.sender;
           if(true) {
-            address p = beneficiary.p;
+            address payable p = beneficiary.p;
             if(true) {
               uint t2 = endTime.t;
               if(true) {
                 uint n = highestBid.amount;
                 if(s==owner.p) {
                   if(t1>=t2) {
-                    payable(p).send(n);
+                    p.send(n);
                     emit Send(p,n);
                     return true;
                   }
@@ -223,13 +223,13 @@ contract Auction {
       uint newValue = updateuintByint(withdrawCount[p].c,_delta);
       withdrawCount[p].c = newValue;
   }
-  function updateSendOnInsertWithdraw_r6(address p,uint n) private    {
+  function updateSendOnInsertWithdraw_r6(address payable p,uint n) private    {
       if(true) {
-        payable(p).send(n);
+        p.send(n);
         emit Send(p,n);
       }
   }
-  function updateBeneficiaryOnInsertConstructor_r9(address p) private    {
+  function updateBeneficiaryOnInsertConstructor_r9(address payable p) private    {
       if(true) {
         beneficiary = BeneficiaryTuple(p,true);
       }
@@ -255,7 +255,7 @@ contract Auction {
         if(true) {
           address h = highestBid.bidder;
           if(true) {
-            address p = msg.sender;
+            address payable p = msg.sender;
             BalanceTuple memory balanceTuple = balance[p];
             if(true) {
               uint n = balanceTuple.n;
@@ -274,7 +274,7 @@ contract Auction {
   }
   function updateWithdrawOnInsertRecv_withdraw_r14() private   returns (bool) {
       if(true) {
-        address p = highestBid.bidder;
+        address payable p = highestBid.bidder;
         uint m = highestBid.amount;
         if(true==end.b) {
           if(p==msg.sender) {

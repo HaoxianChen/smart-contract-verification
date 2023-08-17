@@ -57,11 +57,13 @@ contract Tether {
     updateTotalSupplyOnInsertConstructor_r4();
     updateOwnerOnInsertConstructor_r13();
   }
-  function issue(address p,uint amount) public  checkViolations  {
+  function issue(address p,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r11 = updateIssueOnInsertRecv_issue_r11(p,amount);
       if(r11==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getAllowance(address p,address s) public view  returns (uint) {
       AllowanceTuple memory allowanceTuple = allowance[p][s];
@@ -72,19 +74,21 @@ contract Tether {
       uint n = totalSupply.n;
       return n;
   }
-  function redeem(address p,uint amount) public  checkViolations  {
+  function redeem(address p,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r24 = updateRedeemOnInsertRecv_redeem_r24(p,amount);
       if(r24==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function transferFrom(address from,address to,uint amount) public  checkViolations  {
+  function transferFrom(address from,address to,uint amount) public  {
       bool r0 = updateTransferFromWithFeeOnInsertRecv_transferFrom_r0(from,to,amount);
       if(r0==false) {
         revert("Rule condition failed");
       }
   }
-  function approve(address s,uint n) public  checkViolations  {
+  function approve(address s,uint n) public  {
       bool r25 = updateIncreaseAllowanceOnInsertRecv_approve_r25(s,n);
       if(r25==false) {
         revert("Rule condition failed");
@@ -95,7 +99,7 @@ contract Tether {
       uint n = balanceOfTuple.n;
       return n;
   }
-  function transfer(address to,uint amount) public  checkViolations  {
+  function transfer(address to,uint amount) public  {
       bool r8 = updateTransferWithFeeOnInsertRecv_transfer_r8(to,amount);
       if(r8==false) {
         revert("Rule condition failed");

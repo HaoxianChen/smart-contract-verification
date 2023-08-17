@@ -20,66 +20,73 @@ contract Escrow {
   }
 
   function deposit(address p) onlyOwner public payable {
+    require(totalFunds == raised || state != State.OPEN);
     deposits[p] = deposits[p] + msg.value;
     totalFunds += msg.value;
     raised += msg.value;
+    assert(totalFunds == raised || state != State.OPEN);
   }
 
   function withdraw() public {
+    require(totalFunds == raised || state != State.OPEN);
     require(state == State.SUCCESS);
     beneficiary.transfer(address(this).balance);
     totalFunds = 0;
+    assert(totalFunds == raised || state != State.OPEN);
   }
 
   function claimRefund(address payable p) public {
+    require(totalFunds == raised || state != State.OPEN);
     require(state == State.REFUND);
     uint256 amount = deposits[p];
     deposits[p] = 0;
     p.transfer(amount);
     totalFunds -= amount;
+    assert(totalFunds == raised || state != State.OPEN);
   }
 
   modifier onlyOwner {require(owner == msg.sender); _; }
   function close() onlyOwner public{state = State.SUCCESS;}
   function refund() onlyOwner public{state = State.REFUND;}
-  function check() public view {
-    assert(totalFunds == raised || state != State.OPEN);
-  }
+ // function check() public view {
+ //   assert(totalFunds == raised || state != State.OPEN);
+ // }
 }
 
-contract Crowdsale {
-  Escrow escrow;
-  uint256 raised = 0;
-  uint256 goal = 10000 * 10**18;
-  uint256 closeTime = block.timestamp + 30 days;
-  bool closed;
-
-  //address payable constant init = payable(address(uint160(0xDEADBEEF)));
-
-  constructor() public{
-    escrow = new Escrow(payable(address(0xDEADBEEF)));
-    closed = false;
-  }
-
-  function invest() payable public{
-    // fix:
-    require(block.timestamp<=closeTime);
-    require(raised < goal);
-    escrow.deposit{value: msg.value}(msg.sender);
-    raised += msg.value;
-  }
-
-  function close() public{
-    require(block.timestamp > closeTime || raised >= goal);
-    if (raised >= goal) {
-      escrow.close();
-      closed = true;
-    } else {
-      escrow.refund();
-	 }
-  }
-}
-
-contract Deployer{
-    Crowdsale c = new Crowdsale();
-}
+// contract Crowdsale {
+//   Escrow escrow;
+//   uint256 raised = 0;
+//   uint256 goal = 10000 * 10**18;
+//   uint256 closeTime = block.timestamp + 30 days;
+//   bool closed;
+// 
+//   //address payable constant init = payable(address(uint160(0xDEADBEEF)));
+// 
+//   constructor() public{
+//     escrow = new Escrow(address(0xDEADBEEF));
+//     closed = false;
+//   }
+// 
+//   function invest() payable public{
+//     // fix:
+//     require(block.timestamp<=closeTime);
+//     require(raised < goal);
+//     // escrow.deposit{value: msg.value}(msg.sender);
+//     escrow.deposit(msg.sender);
+//     raised += msg.value;
+//   }
+// 
+//   function close() public{
+//     require(block.timestamp > closeTime || raised >= goal);
+//     if (raised >= goal) {
+//       escrow.close();
+//       closed = true;
+//     } else {
+//       escrow.refund();
+// 	 }
+//   }
+// }
+// 
+// contract Deployer{
+//     Crowdsale c = new Crowdsale();
+// }

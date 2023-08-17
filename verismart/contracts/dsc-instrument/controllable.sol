@@ -43,10 +43,12 @@ contract Controllable {
     updateTotalBalancesOnInsertConstructor_r25();
   }
   function transferFrom(address from,address to,uint amount) public  checkViolations  {
+    require(totalSupply.n == totalBalances.m);
       bool r22 = updateTransferFromOnInsertRecv_transferFrom_r22(from,to,amount);
       if(r22==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getAllowance(address p,address s) public view  returns (uint) {
       AllowanceTuple memory allowanceTuple = allowance[p][s];
@@ -58,10 +60,12 @@ contract Controllable {
       return n;
   }
   function mint(address p,uint amount) public  checkViolations  {
+    require(totalSupply.n == totalBalances.m);
       bool r20 = updateMintOnInsertRecv_mint_r20(p,amount);
       if(r20==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getBalanceOf(address p) public view  returns (uint) {
       BalanceOfTuple memory balanceOfTuple = balanceOf[p];
@@ -69,22 +73,28 @@ contract Controllable {
       return n;
   }
   function approve(address s,uint n) public  checkViolations  {
+    require(totalSupply.n == totalBalances.m);
       bool r21 = updateIncreaseAllowanceOnInsertRecv_approve_r21(s,n);
       if(r21==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function transfer(address to,uint amount) public  checkViolations  {
+    require(totalSupply.n == totalBalances.m);
       bool r14 = updateTransferOnInsertRecv_transfer_r14(to,amount);
       if(r14==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function burn(address p,uint amount) public  checkViolations  {
+    require(totalSupply.n == totalBalances.m);
       bool r5 = updateBurnOnInsertRecv_burn_r5(p,amount);
       if(r5==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function checkUnequalBalance() private    {
       UnequalBalanceTuple memory unequalBalanceTuple = unequalBalance;

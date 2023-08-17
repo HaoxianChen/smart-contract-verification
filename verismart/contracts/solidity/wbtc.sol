@@ -11,10 +11,10 @@
  * @dev Simpler version of ERC20 interface
  * See https://github.com/ethereum/EIPs/issues/179
  */
-abstract contract ERC20Basic {
-  function totalSupply() virtual public view returns (uint256);
-  function balanceOf(address _who) virtual public view returns (uint256);
-  function transfer(address _to, uint256 _value) virtual public returns (bool);
+contract ERC20Basic {
+  function totalSupply()  public view returns (uint256);
+  function balanceOf(address _who)  public view returns (uint256);
+  function transfer(address _to, uint256 _value)  public returns (bool);
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
 
@@ -87,7 +87,7 @@ contract BasicToken is ERC20Basic {
   /**
   * @dev Total number of tokens in existence
   */
-  function totalSupply() override public view returns (uint256) {
+  function totalSupply()  public view returns (uint256) {
     return totalSupply_;
   }
 
@@ -96,7 +96,7 @@ contract BasicToken is ERC20Basic {
   * @param _to The address to transfer to.
   * @param _value The amount to be transferred.
   */
-  function transfer(address _to, uint256 _value) override virtual public returns (bool) {
+  function transfer(address _to, uint256 _value)   public returns (bool) {
     require(_value <= balances[msg.sender]);
     require(_to != address(0));
 
@@ -113,7 +113,7 @@ contract BasicToken is ERC20Basic {
   * @param _owner The address to query the the balance of.
   * @return An uint256 representing the amount owned by the passed address.
   */
-  function balanceOf(address _owner) override public view returns (uint256) {
+  function balanceOf(address _owner)  public view returns (uint256) {
     return balances[_owner];
   }
 
@@ -125,14 +125,14 @@ contract BasicToken is ERC20Basic {
  * @title ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/20
  */
-abstract contract ERC20 is ERC20Basic {
+contract ERC20 is ERC20Basic {
   function allowance(address _owner, address _spender)
-    virtual public view returns (uint256);
+     public view returns (uint256);
 
   function transferFrom(address _from, address _to, uint256 _value)
-    virtual public returns (bool);
+     public returns (bool);
 
-  function approve(address _spender, uint256 _value) virtual public returns (bool);
+  function approve(address _spender, uint256 _value)  public returns (bool);
   event Approval(
     address indexed owner,
     address indexed spender,
@@ -167,8 +167,8 @@ contract StandardToken is ERC20, BasicToken {
     address _to,
     uint256 _value
   )
-    override
-    virtual
+    
+    
     public
     returns (bool)
   {
@@ -194,7 +194,7 @@ contract StandardToken is ERC20, BasicToken {
    * @param _spender The address which will spend the funds.
    * @param _value The amount of tokens to be spent.
    */
-  function approve(address _spender, uint256 _value) virtual override public returns (bool) {
+  function approve(address _spender, uint256 _value)   public returns (bool) {
     allowed[msg.sender][_spender] = _value;
     emit Approval(msg.sender, _spender, _value);
     return true;
@@ -211,7 +211,7 @@ contract StandardToken is ERC20, BasicToken {
     address _spender
    )
     public
-    override
+    
     view
     returns (uint256)
   {
@@ -231,7 +231,7 @@ contract StandardToken is ERC20, BasicToken {
     address _spender,
     uint256 _addedValue
   )
-    virtual
+    
     public
     returns (bool)
   {
@@ -254,7 +254,7 @@ contract StandardToken is ERC20, BasicToken {
     address _spender,
     uint256 _subtractedValue
   )
-    virtual
+    
     public
     returns (bool)
   {
@@ -278,12 +278,12 @@ contract StandardToken is ERC20, BasicToken {
  * All the operations are done using the smallest and indivisible token unit,
  * just as on Ethereum all the operations are done in wei.
  */
-abstract contract DetailedERC20 is ERC20 {
+contract DetailedERC20 is ERC20 {
   string public name;
   string public symbol;
   uint8 public decimals;
 
-  constructor(string memory _name, string memory _symbol, uint8 _decimals) {
+  constructor(string memory _name, string memory _symbol, uint8 _decimals) public {
     name = _name;
     symbol = _symbol;
     decimals = _decimals;
@@ -312,7 +312,7 @@ contract Ownable {
    * @dev The Ownable constructor sets the original `owner` of the contract to the sender
    * account.
    */
-  constructor() {
+  constructor() public {
     owner = msg.sender;
   }
 
@@ -330,7 +330,7 @@ contract Ownable {
    * It will not be possible to call the functions with the `onlyOwner`
    * modifier anymore.
    */
-  function renounceOwnership() virtual public onlyOwner {
+  function renounceOwnership()  public onlyOwner {
     emit OwnershipRenounced(owner);
     owner = address(0);
   }
@@ -339,7 +339,7 @@ contract Ownable {
    * @dev Allows the current owner to transfer control of the contract to a newOwner.
    * @param _newOwner The address to transfer ownership to.
    */
-  function transferOwnership(address _newOwner) virtual public onlyOwner {
+  function transferOwnership(address _newOwner)  public onlyOwner {
     _transferOwnership(_newOwner);
   }
 
@@ -407,7 +407,7 @@ contract MintableToken is StandardToken, Ownable {
    * @dev Function to stop minting new tokens.
    * @return True if the operation was successful.
    */
-  function finishMinting() virtual public onlyOwner canMint returns (bool) {
+  function finishMinting()  public onlyOwner canMint returns (bool) {
     mintingFinished = true;
     emit MintFinished();
     return true;
@@ -429,7 +429,7 @@ contract BurnableToken is BasicToken {
    * @dev Burns a specific amount of tokens.
    * @param _value The amount of token to be burned.
    */
-  function burn(uint256 _value) virtual public {
+  function burn(uint256 _value)  public {
     _burn(msg.sender, _value);
   }
 
@@ -504,8 +504,6 @@ contract PausableToken is StandardToken, Pausable {
     address _to,
     uint256 _value
   )
-    virtual
-    override(BasicToken, ERC20Basic)
     public
     whenNotPaused
     returns (bool)
@@ -518,8 +516,8 @@ contract PausableToken is StandardToken, Pausable {
     address _to,
     uint256 _value
   )
-    virtual
-    override
+    
+    
     public
     whenNotPaused
     returns (bool)
@@ -531,8 +529,8 @@ contract PausableToken is StandardToken, Pausable {
     address _spender,
     uint256 _value
   )
-    virtual
-    override
+    
+    
     public
     whenNotPaused
     returns (bool)
@@ -544,8 +542,8 @@ contract PausableToken is StandardToken, Pausable {
     address _spender,
     uint _addedValue
   )
-    virtual
-    override
+    
+    
     public
     whenNotPaused
     returns (bool success)
@@ -557,8 +555,8 @@ contract PausableToken is StandardToken, Pausable {
     address _spender,
     uint _subtractedValue
   )
-    virtual
-    override
+    
+    
     public
     whenNotPaused
     returns (bool success)
@@ -589,7 +587,7 @@ contract Claimable is Ownable {
    * @dev Allows the current owner to set the pendingOwner address.
    * @param newOwner The address to transfer ownership to.
    */
-  function transferOwnership(address newOwner) override virtual public onlyOwner {
+  function transferOwnership(address newOwner)   public onlyOwner {
     pendingOwner = newOwner;
   }
 
@@ -670,8 +668,7 @@ contract CanReclaimToken is Ownable {
 
 // empty block is used as this contract just inherits others.
 contract OwnableContract is CanReclaimToken, Claimable { 
-    function transferOwnership(address _newOwner) override (Claimable,
-                                                            Ownable) virtual public {
+    function transferOwnership(address _newOwner)  public {
       super.transferOwnership(_newOwner);
     }
 } /* solhint-disable-line no-empty-blocks */
@@ -681,50 +678,58 @@ contract OwnableContract is CanReclaimToken, Claimable {
 contract WBTC is StandardToken, DetailedERC20("Wrapped BTC", "WBTC", 8),
     MintableToken, BurnableToken, PausableToken, OwnableContract {
 
-    function burn(uint value) override public onlyOwner {
+    function burn(uint value)  public onlyOwner {
+        require(balanceTotal == totalSupply());
         super.burn(value);
+        assert(balanceTotal == totalSupply());
     }
 
-    function finishMinting() override public view onlyOwner returns (bool) {
+    function finishMinting()  public onlyOwner returns (bool) {
         return false;
     }
 
     function transfer(address _to, uint256 _value) 
-        override (BasicToken, ERC20Basic, PausableToken) public returns (bool) {
-      return super.transfer(_to, _value);
+         public returns (bool) {
+      // return super.transfer(_to, _value);
+        require(balanceTotal == totalSupply());
+	bool ret = super.transfer(_to, _value);
+        assert(balanceTotal == totalSupply());
+	return ret;
     }
 
     function transferFrom(address _from, address _to, uint256 _value) 
-        override (ERC20, StandardToken, PausableToken) public returns (bool) {
-      return super.transferFrom(_from, _to, _value);
+        public returns (bool) {
+      // return super.transferFrom(_from, _to, _value);
+        require(balanceTotal == totalSupply());
+	bool ret= super.transferFrom(_from, _to, _value);
+        assert(balanceTotal == totalSupply());
+	return ret;
     }
 
-    function transferOwnership(address _newOwner) override (Ownable,
-                                                            OwnableContract
-                                                            ) onlyOwner public {
+    function transferOwnership(address _newOwner)  onlyOwner public {
+        require(balanceTotal == totalSupply());
       super.transferOwnership(_newOwner);
+        assert(balanceTotal == totalSupply());
     }
 
-    function increaseApproval(address _spender, uint _addedValue) override
-        (PausableToken, StandardToken) public returns (bool) {
+    function increaseApproval(address _spender, uint _addedValue)  public returns (bool) {
       return super.increaseApproval(_spender, _addedValue);
     }
 
-    function decreaseApproval(address _spender, uint _subtractedValue) override
-        (PausableToken, StandardToken) public returns (bool) {
+    function decreaseApproval(address _spender, uint _subtractedValue)  public returns (bool) {
       return super.decreaseApproval(_spender, _subtractedValue);
     }
 
     function approve(address _spender, uint256 _value) 
-        override (ERC20, PausableToken,StandardToken) public returns (bool) {
+        public returns (bool) {
       return super.approve(_spender, _value);
     }
 
-    function renounceOwnership() override public view onlyOwner {
+    function renounceOwnership()  public onlyOwner {
         revert("renouncing ownership is blocked");
     }
 
     function check() public view {
-        assert(balanceTotal == totalSupply());
+        // assert(balanceTotal == totalSupply());
     }
 }

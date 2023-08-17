@@ -54,68 +54,86 @@ contract Matic {
     updateTotalSupplyOnInsertConstructor_r12();
     updatePausedOnInsertConstructor_r5();
   }
-  function transferFrom(address from,address to,uint amount) public  checkViolations  {
+  function transferFrom(address from,address to,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r1 = updateTransferFromOnInsertRecv_transferFrom_r1(from,to,amount);
       if(r1==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getAllowance(address p,address s) public view  returns (uint) {
       AllowanceTuple memory allowanceTuple = allowance[p][s];
       uint n = allowanceTuple.n;
       return n;
   }
-  function addPauser(address p) public  checkViolations  {
+  function addPauser(address p) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r21 = updateIsPauserOnInsertRecv_addPauser_r21(p);
       if(r21==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getTotalSupply() public view  returns (uint) {
       uint n = totalSupply.n;
       return n;
   }
-  function mint(address p,uint amount) public  checkViolations  {
+  function mint(address p,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r13 = updateMintOnInsertRecv_mint_r13(p,amount);
       if(r13==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function approve(address s,uint n) public  checkViolations  {
+  function approve(address s,uint n) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r25 = updateIncreaseAllowanceOnInsertRecv_approve_r25(s,n);
       if(r25==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function burn(address p,uint amount) public  checkViolations  {
+  function burn(address p,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r10 = updateBurnOnInsertRecv_burn_r10(p,amount);
       if(r10==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function unpause() public  checkViolations  {
+  function unpause() public  {
+    require(totalSupply.n == totalBalances.m);
       bool r23 = updatePausedOnInsertRecv_unpause_r23();
       if(r23==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function transfer(address to,uint amount) public  checkViolations  {
+  function transfer(address to,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r3 = updateTransferOnInsertRecv_transfer_r3(to,amount);
       if(r3==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function pause() public  checkViolations  {
+  function pause() public  {
+    require(totalSupply.n == totalBalances.m);
       bool r11 = updatePausedOnInsertRecv_pause_r11();
       if(r11==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function renouncePauser(address p) public  checkViolations  {
+  function renouncePauser(address p) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r14 = updateIsPauserOnInsertRecv_renouncePauser_r14(p);
       if(r14==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getBalanceOf(address p) public view  returns (uint) {
       BalanceOfTuple memory balanceOfTuple = balanceOf[p];

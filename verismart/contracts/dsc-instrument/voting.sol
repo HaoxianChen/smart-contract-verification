@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.7.0 <0.9.0;
 
 contract Voting {
   struct QuorumSizeTuple {
@@ -39,7 +38,7 @@ contract Voting {
   QuorumSizeTuple quorumSize;
   event Vote(address p,uint proposal);
 
-  constructor (address[] memory voters, uint32 _quorum) {
+  constructor (address[] memory voters, uint32 _quorum) public {
     for (uint i = 0; i < voters.length; i++) {
       isVoter[voters[i]].b = true;
     }

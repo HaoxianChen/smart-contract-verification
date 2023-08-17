@@ -47,55 +47,67 @@ contract Bnb {
     updateTotalSupplyOnInsertConstructor_r2();
     updateOwnerOnInsertConstructor_r20();
   }
-  function transfer(address to,uint amount) public  checkViolations  {
+  function transfer(address to,uint amount) public  {
+      require(totalBalances.m == totalSupply.n);
       bool r16 = updateTransferOnInsertRecv_transfer_r16(to,amount);
       if(r16==false) {
         revert("Rule condition failed");
       }
+      assert(totalBalances.m + freezeSum.m == totalSupply.n);
   }
   function getAllowance(address p,address s) public view  returns (uint) {
       AllowanceTuple memory allowanceTuple = allowance[p][s];
       uint n = allowanceTuple.n;
       return n;
   }
-  function approve(address s,uint n) public  checkViolations  {
+  function approve(address s,uint n) public  {
+      require(totalBalances.m == totalSupply.n);
       bool r23 = updateIncreaseAllowanceOnInsertRecv_approve_r23(s,n);
       if(r23==false) {
         revert("Rule condition failed");
       }
+      assert(totalBalances.m == totalSupply.n);
   }
-  function burn(address p,uint amount) public  checkViolations  {
+  function burn(address p,uint amount) public  {
+      require(totalBalances.m == totalSupply.n);
       bool r5 = updateBurnOnInsertRecv_burn_r5(p,amount);
       if(r5==false) {
         revert("Rule condition failed");
       }
+      assert(totalBalances.m == totalSupply.n);
   }
   function getTotalSupply() public view  returns (uint) {
       uint n = totalSupply.n;
       return n;
   }
-  function transferFrom(address from,address to,uint amount) public  checkViolations  {
+  function transferFrom(address from,address to,uint amount) public  {
+      require(totalBalances.m == totalSupply.n);
       bool r24 = updateTransferFromOnInsertRecv_transferFrom_r24(from,to,amount);
       if(r24==false) {
         revert("Rule condition failed");
       }
+      assert(totalBalances.m == totalSupply.n);
   }
-  function mint(address p,uint amount) public  checkViolations  {
+  function mint(address p,uint amount) public  {
+      require(totalBalances.m == totalSupply.n);
       bool r22 = updateMintOnInsertRecv_mint_r22(p,amount);
       if(r22==false) {
         revert("Rule condition failed");
       }
+      assert(totalBalances.m == totalSupply.n);
   }
   function getBalanceOf(address p) public view  returns (uint) {
       BalanceOfTuple memory balanceOfTuple = balanceOf[p];
       uint n = balanceOfTuple.n;
       return n;
   }
-  function freeze(uint n) public  checkViolations  {
+  function freeze(uint n) public  {
+      require(totalBalances.m == totalSupply.n);
       bool r19 = updateFreezeOnInsertRecv_freeze_r19(n);
       if(r19==false) {
         revert("Rule condition failed");
       }
+      assert(totalBalances.m == totalSupply.n);
   }
   function checkUnequalBalance() private    {
       UnequalBalanceTuple memory unequalBalanceTuple = unequalBalance;

@@ -41,13 +41,13 @@ contract Shib {
     updateTotalBalancesOnInsertConstructor_r22();
     updateOwnerOnInsertConstructor_r8();
   }
-  function burnFrom(address p,uint n) public  checkViolations  {
+  function burnFrom(address p,uint n) public  {
       bool r2 = updateBurnFromOnInsertRecv_burnFrom_r2(p,n);
       if(r2==false) {
         revert("Rule condition failed");
       }
   }
-  function mint(address p,uint amount) public  checkViolations  {
+  function mint(address p,uint amount) public  {
       bool r18 = updateMintOnInsertRecv_mint_r18(p,amount);
       if(r18==false) {
         revert("Rule condition failed");
@@ -58,8 +58,10 @@ contract Shib {
       uint n = allowanceTuple.n;
       return n;
   }
-  function transferFrom(address from,address to,uint amount) public  checkViolations  {
+  function transferFrom(address from,address to,uint amount) public  {
+      require(totalSupply.n == totalBalances.m);
       bool r20 = updateTransferFromOnInsertRecv_transferFrom_r20(from,to,amount);
+      assert(totalSupply.n == totalBalances.m);
       if(r20==false) {
         revert("Rule condition failed");
       }
@@ -68,8 +70,10 @@ contract Shib {
       uint n = totalSupply.n;
       return n;
   }
-  function approve(address s,uint n) public  checkViolations  {
+  function approve(address s,uint n) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r19 = updateIncreaseAllowanceOnInsertRecv_approve_r19(s,n);
+      assert(totalSupply.n == totalBalances.m);
       if(r19==false) {
         revert("Rule condition failed");
       }
@@ -79,13 +83,13 @@ contract Shib {
       uint n = balanceOfTuple.n;
       return n;
   }
-  function transfer(address to,uint amount) public  checkViolations  {
+  function transfer(address to,uint amount) public  {
       bool r13 = updateTransferOnInsertRecv_transfer_r13(to,amount);
       if(r13==false) {
         revert("Rule condition failed");
       }
   }
-  function burn(address p,uint amount) public  checkViolations  {
+  function burn(address p,uint amount) public  {
       bool r5 = updateBurnOnInsertRecv_burn_r5(p,amount);
       if(r5==false) {
         revert("Rule condition failed");
@@ -370,7 +374,7 @@ contract Shib {
       }
       return false;
   }
-  function equalBalance() public view {
-    assert(totalSupply.n == totalBalances.m);
-  }
+  // function equalBalance() public view {
+  //   assert(totalSupply.n == totalBalances.m);
+  // }
 }

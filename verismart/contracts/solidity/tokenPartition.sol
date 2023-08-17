@@ -17,7 +17,7 @@ contract TokenPartition {
 
     mapping(uint256 => uint256) totalBalanceByPartition;
 
-    constructor() {
+    constructor() public {
       owner = msg.sender;
     }
 
@@ -28,25 +28,30 @@ contract TokenPartition {
 
     function issueByPartition(address account, uint256 partition, 
                               uint256 amount) public onlyOwner {
+      require(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
       require(account!=address(0));
       balanceOfByPartition[account][partition] += amount;
       totalBalanceByPartition[partition] += amount;
       totalSupplyByPartition[partition] += amount;
       emit IssueByPartition(msg.sender, account, partition, amount);
+      assert(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
     }
 
     function redeemByPartition(address account, uint256 partition,
                               uint256 amount) public onlyOwner {
+      require(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
       require(account!=address(0));
       require(balanceOfByPartition[account][partition] >= amount);
       balanceOfByPartition[account][partition] -= amount;
       totalBalanceByPartition[partition] -= amount;
       totalSupplyByPartition[partition] -=amount;
       emit RedeemptionByPartition(msg.sender, account, partition, amount);
+      assert(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
     }
 
     function transferByPartition(address from, address to, uint256 partition,
                                 uint256 amount) public {
+      require(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
       require(from!=address(0));
       require(to!=address(0));
       require(balanceOfByPartition[from][partition] >= amount);
@@ -58,11 +63,11 @@ contract TokenPartition {
       totalBalanceByPartition[partition] += amount;
 
       emit TransferByPartition(from,to,partition,amount);
+      assert(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
     }
 
     function equalBalance(uint256 partition) public view {
-      assert(totalSupplyByPartition[partition] == 
-             totalBalanceByPartition[partition]);
+      // assert(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
     }
 
 

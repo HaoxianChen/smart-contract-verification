@@ -458,7 +458,7 @@ contract TokenMintERC20Token is ERC20 {
      * @param totalSupply total supply of tokens in lowest units (depending on decimals)
      * @param tokenOwnerAddress address that gets 100% of token supply
      */
-    constructor(string memory name, string memory symbol, uint8 decimals, uint256 totalSupply, address payable feeReceiver, address tokenOwnerAddress) payable {
+    constructor(string memory name, string memory symbol, uint8 decimals, uint256 totalSupply, address payable feeReceiver, address tokenOwnerAddress) payable public {
       _name = name;
       _symbol = symbol;
       _decimals = decimals;

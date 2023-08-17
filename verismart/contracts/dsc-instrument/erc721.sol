@@ -56,29 +56,35 @@ contract Nft {
   constructor() public {
     updateOwnerOnInsertConstructor_r10();
   }
-  function burn(uint tokenId) public  checkViolations  {
+  function burn(uint tokenId) public  {
+      require(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
       bool r12 = updateTransferOnInsertRecv_burn_r12(tokenId);
       if(r12==false) {
         revert("Rule condition failed");
       }
+      assert(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
   }
   function getOwnerOf(uint tokenId) public view  returns (address) {
       OwnerOfTuple memory ownerOfTuple = ownerOf[tokenId];
       address p = ownerOfTuple.p;
       return p;
   }
-  function setApproval(uint tokenId,address p,bool b) public  checkViolations  {
+  function setApproval(uint tokenId,address p,bool b) public  {
+      require(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
       bool r9 = updateApprovalOnInsertRecv_setApproval_r9(tokenId,p,b);
       if(r9==false) {
         revert("Rule condition failed");
       }
+      assert(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
   }
-  function transferFrom(address from,address to,uint tokenId) public  checkViolations  {
+  function transferFrom(address from,address to,uint tokenId) public  {
+      require(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
       bool r6 = updateTransferOnInsertRecv_transferFrom_r6(from,to,tokenId);
       bool r4 = updateTransferOnInsertRecv_transferFrom_r4(from,to,tokenId);
       if(r6==false && r4==false) {
         revert("Rule condition failed");
       }
+      assert(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
   }
   function getExists(uint tokenId) public view  returns (bool) {
       ExistsTuple memory existsTuple = exists[tokenId];
@@ -90,7 +96,7 @@ contract Nft {
       bool b = approvedTuple.b;
       return b;
   }
-  function setApprovalForAll(address operator,bool _approved) public  checkViolations  {
+  function setApprovalForAll(address operator,bool _approved) public  {
       bool r1 = updateIsApprovedForAllOnInsertRecv_setApprovalForAll_r1(operator,_approved);
       if(r1==false) {
         revert("Rule condition failed");
@@ -101,22 +107,26 @@ contract Nft {
       uint n = balanceOfTuple.n;
       return n;
   }
-  function mint(uint tokenId,address to) public  checkViolations  {
+  function mint(uint tokenId,address to) public  {
+      require(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
       bool r3 = updateTransferOnInsertRecv_mint_r3(tokenId,to);
       if(r3==false) {
         revert("Rule condition failed");
       }
+      assert(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
   }
   function getIsApprovedForAll(address owner,address operator) public view  returns (bool) {
       IsApprovedForAllTuple memory isApprovedForAllTuple = isApprovedForAll[owner][operator];
       bool b = isApprovedForAllTuple.b;
       return b;
   }
-  function transfer(address to,uint tokenId) public  checkViolations  {
+  function transfer(address to,uint tokenId) public  {
+      require(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
       bool r8 = updateTransferOnInsertRecv_transfer_r8(to,tokenId);
       if(r8==false) {
         revert("Rule condition failed");
       }
+      assert(ownerOf[tokenId].p != address(0) || ! exists[tokenId].b);
   }
   function checkTokenNoOwner() private    {
       uint N = tokenNoOwnerKeyArray.length;

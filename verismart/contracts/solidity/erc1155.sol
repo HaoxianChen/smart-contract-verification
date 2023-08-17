@@ -1,17 +1,170 @@
+// Sources flattened with hardhat v2.17.0 https://hardhat.org
+
+// File @openzeppelin/contracts/utils/introspection/IERC165.sol@v4.7.3
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)
+
+// pragma solidity ^0.8.0;
+
+/**
+ * @dev Interface of the ERC165 standard, as defined in the
+ * https://eips.ethereum.org/EIPS/eip-165[EIP].
+ *
+ * Implementers can declare support of contract interfaces, which can then be
+ * queried by others ({ERC165Checker}).
+ *
+ * For an implementation, see {ERC165}.
+ */
+interface IERC165 {
+    /**
+     * @dev Returns true if this contract implements the interface defined by
+     * `interfaceId`. See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     *
+     * This function call must use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+}
+
+
+// File @openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol@v4.7.3
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts (last updated v4.5.0) (token/ERC1155/IERC1155Receiver.sol)
+
+// pragma solidity ^0.8.0;
+
+/**
+ * @dev _Available since v3.1._
+ */
+// interface IERC1155Receiver is IERC165 {
+//     /**
+//      * @dev Handles the receipt of a single ERC1155 token type. This function is
+//      * called at the end of a `safeTransferFrom` after the balance has been updated.
+//      *
+//      * NOTE: To accept the transfer, this must return
+//      * `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
+//      * (i.e. 0xf23a6e61, or its own function selector).
+//      *
+//      * @param operator The address which initiated the transfer (i.e. msg.sender)
+//      * @param from The address which previously owned the token
+//      * @param id The ID of the token being transferred
+//      * @param value The amount of tokens being transferred
+//      * @param data Additional data with no specified format
+//      * @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
+//      */
+//     function onERC1155Received(
+//         address operator,
+//         address from,
+//         uint256 id,
+//         uint256 value,
+//         bytes calldata data
+//     ) external returns (bytes4);
+// 
+//     /**
+//      * @dev Handles the receipt of a multiple ERC1155 token types. This function
+//      * is called at the end of a `safeBatchTransferFrom` after the balances have
+//      * been updated.
+//      *
+//      * NOTE: To accept the transfer(s), this must return
+//      * `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))`
+//      * (i.e. 0xbc197c81, or its own function selector).
+//      *
+//      * @param operator The address which initiated the batch transfer (i.e. msg.sender)
+//      * @param from The address which previously owned the token
+//      * @param ids An array containing ids of each token being transferred (order and length must match values array)
+//      * @param values An array containing amounts of each token being transferred (order and length must match ids array)
+//      * @param data Additional data with no specified format
+//      * @return `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))` if transfer is allowed
+//      */
+//     function onERC1155BatchReceived(
+//         address operator,
+//         address from,
+//         uint256[] calldata ids,
+//         uint256[] calldata values,
+//         bytes calldata data
+//     ) external returns (bytes4);
+// }
+
+
+// File @openzeppelin/contracts/utils/introspection/ERC165.sol@v4.7.3
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts v4.4.1 (utils/introspection/ERC165.sol)
+
+// pragma solidity ^0.8.0;
+
+/**
+ * @dev Implementation of the {IERC165} interface.
+ *
+ * Contracts that want to implement ERC165 should inherit from this contract and override {supportsInterface} to check
+ * for the additional interface id that will be supported. For example:
+ *
+ * ```solidity
+ * function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+ *     return interfaceId == type(MyInterface).interfaceId || super.supportsInterface(interfaceId);
+ * }
+ * ```
+ *
+ * Alternatively, {ERC165Storage} provides an easier to use but more expensive implementation.
+ */
+//  contract ERC165 is IERC165 {
+contract ERC165 {
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     */
+    // function supportsInterface(bytes4 interfaceId) public view   returns (bool) {
+    //     return interfaceId == type(IERC165).interfaceId;
+    // }
+}
+
+
+// File @openzeppelin/contracts/utils/Context.sol@v4.7.3
+
+// SPDX-License-Identifier: MIT
+// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
+
+// pragma solidity ^0.8.0;
+
+/**
+ * @dev Provides information about the current execution context, including the
+ * sender of the transaction and its data. While these are generally available
+ * via msg.sender and msg.data, they should not be accessed in such a direct
+ * manner, since when dealing with meta-transactions the account sending and
+ * paying for execution may not be the actual sender (as far as an application
+ * is concerned).
+ *
+ * This contract is only required for intermediate, library-like contracts.
+ */
+ contract Context {
+    function _msgSender() internal view  returns (address) {
+        return msg.sender;
+    }
+
+    function _msgData() internal view  returns (bytes memory) {
+        return msg.data;
+    }
+}
+
+
+// File erc1155.sol
+
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.7.0) (token/ERC1155/ERC1155.sol)
 
-pragma solidity ^0.8.0;
+// pragma solidity ^0.8.0;
 
 // import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+
+
 // import "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
 // import "@openzeppelin/contracts/utils/Address.sol";
-import "@openzeppelin/contracts/utils/Context.sol";
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
-interface IERC1155 is IERC165 {
+
+// interface IERC1155 is IERC165 {
+interface IERC1155 {
     /**
      * @dev Emitted when `value` tokens of token type `id` are transferred from `from` to `to` by `operator`.
      */
@@ -132,7 +285,7 @@ interface IERC1155 is IERC165 {
  * _Available since v3.1._
  */
 // contract ERC1155 is Context, ERC165, IERC1155, IERC1155MetadataURI {
-contract ERC1155 is Context, ERC165, IERC1155 {
+contract ERC1155 is Context, ERC165, IERC1155, IERC165 {
     // using Address for address;
 
     // Mapping from token ID to account balances
@@ -150,14 +303,14 @@ contract ERC1155 is Context, ERC165, IERC1155 {
     /**
      * @dev See {_setURI}.
      */
-    constructor(string memory uri_) {
+    constructor(string memory uri_) public {
         _setURI(uri_);
     }
 
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    // function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
+    // function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
     //     return
     //         interfaceId == type(IERC1155).interfaceId ||
     //         interfaceId == type(IERC1155MetadataURI).interfaceId ||
@@ -174,7 +327,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
      * Clients calling this function must replace the `\{id\}` substring with the
      * actual token type ID.
      */
-    //function uri(uint256) public view virtual override returns (string memory) {
+    //function uri(uint256) public view virtual  returns (string memory) {
     //    return _uri;
     //}
 
@@ -185,7 +338,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
      *
      * - `account` cannot be the zero address.
      */
-    function balanceOf(address account, uint256 id) public view virtual override returns (uint256) {
+    function balanceOf(address account, uint256 id) public view   returns (uint256) {
         require(account != address(0), "ERC1155: address zero is not a valid owner");
         return _balances[id][account];
     }
@@ -201,7 +354,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
     //     public
     //     view
     //     virtual
-    //     override
+    //     
     //     returns (uint256[] memory)
     // {
     //     require(accounts.length == ids.length, "ERC1155: accounts and ids length mismatch");
@@ -218,14 +371,14 @@ contract ERC1155 is Context, ERC165, IERC1155 {
     /**
      * @dev See {IERC1155-setApprovalForAll}.
      */
-    function setApprovalForAll(address operator, bool approved) public virtual override {
+    function setApprovalForAll(address operator, bool approved) public   {
         _setApprovalForAll(_msgSender(), operator, approved);
     }
 
     /**
      * @dev See {IERC1155-isApprovedForAll}.
      */
-    function isApprovedForAll(address account, address operator) public view virtual override returns (bool) {
+    function isApprovedForAll(address account, address operator) public view   returns (bool) {
         return _operatorApprovals[account][operator];
     }
 
@@ -238,7 +391,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) public virtual override {
+    ) public   {
         require(
             from == _msgSender() || isApprovedForAll(from, _msgSender()),
             "ERC1155: caller is not token owner nor approved"
@@ -281,7 +434,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) internal virtual {
+    ) internal  {
         require(to != address(0), "ERC1155: transfer to the zero address");
 
         address operator = _msgSender();
@@ -292,10 +445,10 @@ contract ERC1155 is Context, ERC165, IERC1155 {
 
         uint256 fromBalance = _balances[id][from];
         require(fromBalance >= amount, "ERC1155: insufficient balance for transfer");
-        unchecked {
+        //unchecked {
             _balances[id][from] = fromBalance - amount;
             totalBalances[id] -= amount;
-        }
+        // }
         _balances[id][to] += amount;
         totalBalances[id] += amount;
 
@@ -368,7 +521,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
      * Because these URIs cannot be meaningfully represented by the {URI} event,
      * this function emits no events.
      */
-    function _setURI(string memory newuri) internal virtual {
+    function _setURI(string memory newuri) internal  {
         _uri = newuri;
     }
 
@@ -388,7 +541,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) internal virtual {
+    ) internal  {
         require(to != address(0), "ERC1155: mint to the zero address");
 
         address operator = _msgSender();
@@ -456,7 +609,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
         address from,
         uint256 id,
         uint256 amount
-    ) internal virtual {
+    ) internal  {
         require(from != address(0), "ERC1155: burn from the zero address");
 
         address operator = _msgSender();
@@ -467,10 +620,10 @@ contract ERC1155 is Context, ERC165, IERC1155 {
 
         uint256 fromBalance = _balances[id][from];
         require(fromBalance >= amount, "ERC1155: burn amount exceeds balance");
-        unchecked {
+        // unchecked {
             _balances[id][from] = fromBalance - amount;
             totalBalances[id] -= amount;
-        }
+        //}
         totalSupply[id] -= amount;
 
         emit TransferSingle(operator, from, address(0), id, amount);
@@ -524,7 +677,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
         address owner,
         address operator,
         bool approved
-    ) internal virtual {
+    ) internal  {
         require(owner != operator, "ERC1155: setting approval status for self");
         _operatorApprovals[owner][operator] = approved;
         emit ApprovalForAll(owner, operator, approved);
@@ -557,7 +710,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual {}
+    ) internal  {}
 
     /**
      * @dev Hook that is called after any token transfer. This includes minting
@@ -586,7 +739,7 @@ contract ERC1155 is Context, ERC165, IERC1155 {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual {}
+    ) internal  {}
 
     // function _doSafeTransferAcceptanceCheck(
     //     address operator,

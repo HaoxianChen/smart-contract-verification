@@ -51,55 +51,67 @@ contract LtcSwapAsset {
     updateTotalSupplyOnInsertConstructor_r11();
     updateOldOwnerOnInsertConstructor_r8();
   }
-  function transferFrom(address from,address to,uint amount) public  checkViolations  {
+  function transferFrom(address from,address to,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r22 = updateTransferFromOnInsertRecv_transferFrom_r22(from,to,amount);
       if(r22==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function mint(address p,uint amount) public  checkViolations  {
+  function mint(address p,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r21 = updateMintOnInsertRecv_mint_r21(p,amount);
       if(r21==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getTotalSupply() public view  returns (uint) {
       uint n = totalSupply.n;
       return n;
   }
-  function approve(address s,uint n) public  checkViolations  {
+  function approve(address s,uint n) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r25 = updateIncreaseAllowanceOnInsertRecv_approve_r25(s,n);
       if(r25==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getBalanceOf(address p) public view  returns (uint) {
       BalanceOfTuple memory balanceOfTuple = balanceOf[p];
       uint n = balanceOfTuple.n;
       return n;
   }
-  function swapOwner(address p,address q,uint d) public  checkViolations  {
+  function swapOwner(address p,address q,uint d) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r18 = updateSwapOwnerOnInsertRecv_swapOwner_r18(p,q,d);
       if(r18==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function getAllowance(address p,address s) public view  returns (uint) {
       AllowanceTuple memory allowanceTuple = allowance[p][s];
       uint n = allowanceTuple.n;
       return n;
   }
-  function transfer(address to,uint amount) public  checkViolations  {
+  function transfer(address to,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r15 = updateTransferOnInsertRecv_transfer_r15(to,amount);
       if(r15==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
-  function burn(address p,uint amount) public  checkViolations  {
+  function burn(address p,uint amount) public  {
+    require(totalSupply.n == totalBalances.m);
       bool r5 = updateBurnOnInsertRecv_burn_r5(p,amount);
       if(r5==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply.n == totalBalances.m);
   }
   function checkUnequalBalance() private    {
       UnequalBalanceTuple memory unequalBalanceTuple = unequalBalance;

@@ -338,7 +338,7 @@ contract Linktoken {
       }
       return false;
   }
-  function equalBalance() public view {
-    assert(totalSupply.n == totalBalances.m);
-  }
+ function equalBalance() public view {
+   assert(totalSupply.n == totalBalances.m);
+ }
 }

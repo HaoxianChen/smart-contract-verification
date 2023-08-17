@@ -111,7 +111,9 @@ contract Wbtc {
       }
   }
   function mint(address p,uint amount) public  checkViolations  {
+    require(totalSupply.n == totalBalances.m);
       bool r25 = updateMintOnInsertRecv_mint_r25(p,amount);
+    assert(totalSupply.n == totalBalances.m);
       if(r25==false) {
         revert("Rule condition failed");
       }
@@ -238,7 +240,7 @@ contract Wbtc {
   }
   function updateReclaimTokenOnInsertRecv_reclaimToken_r7() private   returns (bool) {
       if(true) {
-        address s = msg.sender;
+        address payable s = msg.sender;
         if(s==owner.p) {
           if(true) {
             address t = address(this);
@@ -322,9 +324,9 @@ contract Wbtc {
       }
       return false;
   }
-  function updateSendOnInsertReclaimToken_r5(address s,uint n) private    {
+  function updateSendOnInsertReclaimToken_r5(address payable s,uint n) private    {
       if(true) {
-        payable(s).send(n);
+        s.send(n);
       }
   }
   function updateUnequalBalanceOnInsertTotalBalances_r6(uint s) private    {
@@ -474,7 +476,7 @@ contract Wbtc {
       }
       return false;
   }
-  function equalBalance() public view {
-    assert(totalSupply.n == totalBalances.m);
-  }
+//  function equalBalance() public view {
+//    assert(totalSupply.n == totalBalances.m);
+//  }
 }

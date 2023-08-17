@@ -21,11 +21,11 @@
 contract Context {
     // Empty internal constructor, to prevent people from mistakenly deploying
     // an instance of this contract, which should be used via inheritance.
-    constructor () { }
+    constructor () public { }
     // solhint-disable-previous-line no-empty-blocks
 
     function _msgSender() internal view returns (address payable) {
-        return payable(msg.sender);
+        return msg.sender;
     }
 
     function _msgData() internal view returns (bytes memory) {
@@ -409,7 +409,9 @@ contract ERC20 is Context, IERC20 {
      * `subtractedValue`.
      */
     function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+      require(totalSupply() == balanceTotal);
         _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: decreased allowance below zero"));
+      assert(totalSupply() == balanceTotal);
         return true;
     }
 
@@ -428,6 +430,7 @@ contract ERC20 is Context, IERC20 {
      * - `sender` must have a balance of at least `amount`.
      */
     function _transfer(address sender, address recipient, uint256 amount) internal {
+      require(totalSupply() == balanceTotal);
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
@@ -436,6 +439,7 @@ contract ERC20 is Context, IERC20 {
         _balances[recipient] = _balances[recipient].add(amount);
         balanceTotal = balanceTotal.add(amount);
         emit Transfer(sender, recipient, amount);
+      assert(totalSupply() == balanceTotal);
     }
 
     /** @dev Creates `amount` tokens and assigns them to `account`, increasing
@@ -517,7 +521,7 @@ contract ERC20 is Context, IERC20 {
 /**
  * @dev Optional functions from the ERC20 standard.
  */
-abstract contract ERC20Detailed is IERC20 {
+contract ERC20Detailed is IERC20 {
     string private _name;
     string private _symbol;
     uint8 private _decimals;
@@ -527,7 +531,7 @@ abstract contract ERC20Detailed is IERC20 {
      * these values are immutable: they can only be set once during
      * construction.
      */
-    constructor (string memory name, string memory symbol, uint8 decimals) {
+    constructor (string memory name, string memory symbol, uint8 decimals) public {
         _name = name;
         _symbol = symbol;
         _decimals = decimals;
@@ -585,14 +589,14 @@ contract LtcSwapAsset is ERC20, ERC20Detailed {
         _;
     }
 
-    constructor() ERC20Detailed("ANY Litecoin", "anyLTC", 8) {
+    constructor() ERC20Detailed("ANY Litecoin", "anyLTC", 8) public {
         _newOwner = msg.sender;
         _newOwnerEffectiveHeight = block.number;
     }
 
-    function check() public view {
-      assert(totalSupply() == balanceTotal);
-    }
+    // function check() public view {
+    //   assert(totalSupply() == balanceTotal);
+    // }
 
     function owner() public view returns (address) {
         if (block.number >= _newOwnerEffectiveHeight) {

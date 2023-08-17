@@ -25,7 +25,7 @@ contract PaymentSpliter {
   OverpaidKeyTuple[] overpaidKeyArray;
   event Release(address p,uint n);
 
-    constructor(address[] memory payees, uint256[] memory shares_) payable {
+    constructor(address[] memory payees, uint256[] memory shares_) public payable {
         require(payees.length == shares_.length, "PaymentSplitter: payees and shares length mismatch");
         require(payees.length > 0, "PaymentSplitter: no payees");
         require(address(this).balance == 0);
@@ -37,10 +37,14 @@ contract PaymentSpliter {
     }
 
   function release(address p) public    {
+    uint256 amount0 = (shares[p].n * totalReceived.n) / totalShares.n ;
+    require(released[p].n <= amount0);
       bool r5 = updateReleaseOnInsertRecv_release_r5(p);
       if(r5==false) {
         revert("Rule condition failed");
       }
+    uint256 amount = (shares[p].n * totalReceived.n) / totalShares.n ;
+    assert(released[p].n <= amount );
   }
   function updateReleaseOnInsertRecv_release_r5(address p) private   returns (bool) {
       if(true) {

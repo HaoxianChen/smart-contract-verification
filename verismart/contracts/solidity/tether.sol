@@ -49,7 +49,7 @@ contract Ownable {
       * @dev The Ownable constructor sets the original `owner` of the contract to the sender
       * account.
       */
-    constructor() {
+    constructor() public {
         owner = msg.sender;
     }
 
@@ -78,11 +78,11 @@ contract Ownable {
  * @dev Simpler version of ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/20
  */
-abstract contract ERC20Basic {
+contract ERC20Basic {
     uint public _totalSupply;
-    function totalSupply() public view virtual returns (uint);
-    function balanceOf(address who) public view virtual returns (uint);
-    function transfer(address to, uint value) public virtual;
+    function totalSupply() public view returns (uint);
+    function balanceOf(address who) public view returns (uint);
+    function transfer(address to, uint value) public ;
     event Transfer(address indexed from, address indexed to, uint value);
 }
 
@@ -90,10 +90,10 @@ abstract contract ERC20Basic {
  * @title ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/20
  */
-abstract contract ERC20 is ERC20Basic {
-    function allowance(address owner, address spender) public view virtual returns (uint);
-    function transferFrom(address from, address to, uint value) public virtual;
-    function approve(address spender, uint value) public virtual;
+contract ERC20 is ERC20Basic {
+    function allowance(address owner, address spender) public view returns (uint);
+    function transferFrom(address from, address to, uint value) public ;
+    function approve(address spender, uint value) public ;
     event Approval(address indexed owner, address indexed spender, uint value);
 }
 
@@ -101,7 +101,7 @@ abstract contract ERC20 is ERC20Basic {
  * @title Basic token
  * @dev Basic version of StandardToken, with no allowances.
  */
-abstract contract BasicToken is Ownable, ERC20Basic {
+contract BasicToken is Ownable, ERC20Basic {
     using SafeMath for uint;
 
     mapping(address => uint) public balances;
@@ -125,7 +125,7 @@ abstract contract BasicToken is Ownable, ERC20Basic {
     * @param _to The address to transfer to.
     * @param _value The amount to be transferred.
     */
-    function transfer(address _to, uint _value) public virtual override onlyPayloadSize(2 * 32) {
+    function transfer(address _to, uint _value) public onlyPayloadSize(2 * 32) {
         uint fee = (_value.mul(basisPointsRate)).div(10000);
         if (fee > maximumFee) {
             fee = maximumFee;
@@ -148,7 +148,7 @@ abstract contract BasicToken is Ownable, ERC20Basic {
     * @param _owner The address to query the the balance of.
     * @return An uint representing the amount owned by the passed address.
     */
-    function balanceOf(address _owner) public view virtual override returns (uint) {
+    function balanceOf(address _owner) public view returns (uint) {
         return balances[_owner];
     }
 
@@ -161,7 +161,7 @@ abstract contract BasicToken is Ownable, ERC20Basic {
  * @dev https://github.com/ethereum/EIPs/issues/20
  * @dev Based oncode by FirstBlood: https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol
  */
-abstract contract StandardToken is BasicToken, ERC20 {
+contract StandardToken is BasicToken, ERC20 {
 
     using SafeMath for uint;
 
@@ -175,7 +175,7 @@ abstract contract StandardToken is BasicToken, ERC20 {
     * @param _to address The address which you want to transfer to
     * @param _value uint the amount of tokens to be transferred
     */
-    function transferFrom(address _from, address _to, uint _value) public virtual override onlyPayloadSize(3 * 32) {
+    function transferFrom(address _from, address _to, uint _value) public onlyPayloadSize(3 * 32) {
         uint _allowance = allowed[_from][msg.sender];
 
         // Check is not needed because sub(_allowance, _value) will already throw if this condition is not met
@@ -206,7 +206,7 @@ abstract contract StandardToken is BasicToken, ERC20 {
     * @param _spender The address which will spend the funds.
     * @param _value The amount of tokens to be spent.
     */
-    function approve(address _spender, uint _value) public virtual override onlyPayloadSize(2 * 32) {
+    function approve(address _spender, uint _value) public onlyPayloadSize(2 * 32) {
 
         // To change the approve amount you first have to reduce the addresses`
         //  allowance to zero by calling `approve(_spender, 0)` if it is not
@@ -224,7 +224,7 @@ abstract contract StandardToken is BasicToken, ERC20 {
     * @param _spender address The address which will spend the funds.
     * @return A uint specifying the amount of tokens still available for the spender.
     */
-    function allowance(address _owner, address _spender) public view virtual override returns (uint) {
+    function allowance(address _owner, address _spender) public view returns (uint) {
         return allowed[_owner][_spender];
     }
 
@@ -275,7 +275,7 @@ contract Pausable is Ownable {
   }
 }
 
-abstract contract BlackList is Ownable, BasicToken {
+contract BlackList is Ownable, BasicToken {
 
     /////// Getters to allow the same blacklist to be used also by other contracts (including upgraded Tether) ///////
     function getBlackListStatus(address _maker) external view returns (bool) {
@@ -315,12 +315,12 @@ abstract contract BlackList is Ownable, BasicToken {
 
 }
 
-abstract contract UpgradedStandardToken is StandardToken{
+contract UpgradedStandardToken is StandardToken{
     // those methods are called by the legacy contract
     // and they must ensure msg.sender to be the contract address
-    function transferByLegacy(address from, address to, uint value) public virtual;
-    function transferFromByLegacy(address sender, address from, address spender, uint value) public virtual;
-    function approveByLegacy(address from, address spender, uint value) public virtual;
+    function transferByLegacy(address from, address to, uint value) public ;
+    function transferFromByLegacy(address sender, address from, address spender, uint value) public ;
+    function approveByLegacy(address from, address spender, uint value) public ;
 }
 
 contract TetherToken is Pausable, StandardToken, BlackList {
@@ -339,7 +339,7 @@ contract TetherToken is Pausable, StandardToken, BlackList {
     // @param _name Token Name
     // @param _symbol Token symbol
     // @param _decimals Token decimals
-    constructor(uint _initialSupply, string memory _name, string memory _symbol, uint _decimals) {
+    constructor(uint _initialSupply, string memory _name, string memory _symbol, uint _decimals) public {
         _totalSupply = _initialSupply;
         name = _name;
         symbol = _symbol;
@@ -350,29 +350,31 @@ contract TetherToken is Pausable, StandardToken, BlackList {
     }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
-    function transfer(address _to, uint _value) public override(BasicToken, ERC20Basic) whenNotPaused {
+    function transfer(address _to, uint _value) public whenNotPaused {
         require(!isBlackListed[msg.sender]);
         // if (deprecated) {
         //     return UpgradedStandardToken(upgradedAddress).transferByLegacy(msg.sender, _to, _value);
         // } else {
         //     return super.transfer(_to, _value);
         // }
-        return super.transfer(_to, _value);
+        // return super.transfer(_to, _value);
+        super.transfer(_to, _value);
     }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
-    function transferFrom(address _from, address _to, uint _value) public override whenNotPaused {
+    function transferFrom(address _from, address _to, uint _value) public whenNotPaused {
         require(!isBlackListed[_from]);
         // if (deprecated) {
         //     return UpgradedStandardToken(upgradedAddress).transferFromByLegacy(msg.sender, _from, _to, _value);
         // } else {
         //     return super.transferFrom(_from, _to, _value);
         // }
-        return super.transferFrom(_from, _to, _value);
+        // return super.transferFrom(_from, _to, _value);
+        super.transferFrom(_from, _to, _value);
     }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
-    // function balanceOf(address who) public view override(BasicToken, ERC20Basic) returns (uint) {
+    // function balanceOf(address who) public view returns (uint) {
     //     if (deprecated) {
     //         return UpgradedStandardToken(upgradedAddress).balanceOf(who);
     //     } else {
@@ -381,7 +383,7 @@ contract TetherToken is Pausable, StandardToken, BlackList {
     // }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
-    // function approve(address _spender, uint _value) public override onlyPayloadSize(2 * 32) {
+    // function approve(address _spender, uint _value) public onlyPayloadSize(2 * 32) {
     //     if (deprecated) {
     //         return UpgradedStandardToken(upgradedAddress).approveByLegacy(msg.sender, _spender, _value);
     //     } else {
@@ -390,7 +392,7 @@ contract TetherToken is Pausable, StandardToken, BlackList {
     // }
 
     // Forward ERC20 methods to upgraded contract if this one is deprecated
-    // function allowance(address _owner, address _spender) public view override returns (uint remaining) {
+    // function allowance(address _owner, address _spender) public view returns (uint remaining) {
     //     if (deprecated) {
     //         return StandardToken(upgradedAddress).allowance(_owner, _spender);
     //     } else {
@@ -406,7 +408,7 @@ contract TetherToken is Pausable, StandardToken, BlackList {
     // }
 
     // deprecate current contract if favour of a new one
-    function totalSupply() public view override returns (uint) {
+    function totalSupply() public view returns (uint) {
         // if (deprecated) {
         //     return StandardToken(upgradedAddress).totalSupply();
         // } else {

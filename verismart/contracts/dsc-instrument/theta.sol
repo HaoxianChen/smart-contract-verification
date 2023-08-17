@@ -52,18 +52,20 @@ contract Theta {
     updateTotalBalancesOnInsertConstructor_r21();
     updateOwnerOnInsertConstructor_r2();
   }
-  function mint(address p,uint amount) public  checkViolations  {
+  function mint(address p,uint amount) public  {
+// require(totalBalances.m == totalSupply.n);
       bool r23 = updateMintOnInsertRecv_mint_r23(p,amount);
       if(r23==false) {
         revert("Rule condition failed");
       }
+// assert(totalBalances.m == totalSupply.n);
   }
   function getAllowance(address p,address s) public view  returns (uint) {
       AllowanceTuple memory allowanceTuple = allowance[p][s];
       uint n = allowanceTuple.n;
       return n;
   }
-  function transferFrom(address from,address to,uint amount) public  checkViolations  {
+  function transferFrom(address from,address to,uint amount) public  {
       bool r25 = updateTransferFromOnInsertRecv_transferFrom_r25(from,to,amount);
       if(r25==false) {
         revert("Rule condition failed");
@@ -78,19 +80,19 @@ contract Theta {
       uint n = balanceOfTuple.n;
       return n;
   }
-  function burn(address p,uint amount) public  checkViolations  {
+  function burn(address p,uint amount) public  {
       bool r8 = updateBurnOnInsertRecv_burn_r8(p,amount);
       if(r8==false) {
         revert("Rule condition failed");
       }
   }
-  function transfer(address to,uint amount) public  checkViolations  {
+  function transfer(address to,uint amount) public  {
       bool r17 = updateTransferOnInsertRecv_transfer_r17(to,amount);
       if(r17==false) {
         revert("Rule condition failed");
       }
   }
-  function approve(address s,uint n) public  checkViolations  {
+  function approve(address s,uint n) public  {
       bool r24 = updateIncreaseAllowanceOnInsertRecv_approve_r24(s,n);
       if(r24==false) {
         revert("Rule condition failed");
@@ -367,4 +369,7 @@ contract Theta {
       int delta = int(n);
       updateTotalSupplyOnIncrementAllMint_r16(delta);
   }
+  function chck() public {
+	assert(totalBalances.m == totalSupply.n);
+}
 }

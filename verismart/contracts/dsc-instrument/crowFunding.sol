@@ -59,29 +59,37 @@ contract CrowFunding {
       bool b = closed.b;
       return b;
   }
-  function refund() public  checkViolations  {
+  function refund() public   {
+    require(totalBalance.m == raised.n || closed.b);
       bool r5 = updateRefundOnInsertRecv_refund_r5();
       if(r5==false) {
         revert("Rule condition failed");
       }
+    assert(totalBalance.m == raised.n || closed.b);
   }
-  function withdraw() public  checkViolations  {
+  function withdraw() public   {
+    require(totalBalance.m == raised.n || closed.b);
       bool r10 = updateWithdrawOnInsertRecv_withdraw_r10();
       if(r10==false) {
         revert("Rule condition failed");
       }
+    assert(totalBalance.m == raised.n || closed.b);
   }
-  function close() public  checkViolations  {
+  function close() public  {
+    require(totalBalance.m == raised.n || closed.b);
       bool r11 = updateClosedOnInsertRecv_close_r11();
       if(r11==false) {
         revert("Rule condition failed");
       }
+    assert(totalBalance.m == raised.n || closed.b);
   }
-  function invest() public  checkViolations payable  {
+  function invest() public  payable  {
+    require(totalBalance.m == raised.n || closed.b);
       bool r6 = updateInvestOnInsertRecv_invest_r6();
       if(r6==false) {
         revert("Rule condition failed");
       }
+    assert(totalBalance.m == raised.n || closed.b);
   }
   function checkMissingFund() private    {
       MissingFundTuple memory missingFundTuple = missingFund;

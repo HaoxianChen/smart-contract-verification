@@ -61,6 +61,7 @@ contract SimpleAuction {
     /// The value will only be refunded if the
     /// auction is not won.
     function bid() external payable {
+        require(withdrawCount[msg.sender] <= 1);
         // No arguments are necessary, all
         // information is already part of
         // the transaction. The keyword payable
@@ -93,10 +94,12 @@ contract SimpleAuction {
         highestBidder = msg.sender;
         highestBid = msg.value;
         emit HighestBidIncreased(msg.sender, msg.value);
+        assert(withdrawCount[msg.sender] <= 1);
     }
 
     /// Withdraw a bid that was overbid.
     function withdraw() external returns (bool) {
+        require(withdrawCount[msg.sender] <= 1);
         uint amount = pendingReturns[msg.sender];
         if (amount > 0) {
             // It is important to set this to zero because the recipient
@@ -111,6 +114,7 @@ contract SimpleAuction {
             }
             withdrawCount[msg.sender] += 1;
         }
+        assert(withdrawCount[msg.sender] <= 1);
         return true;
     }
 
@@ -129,6 +133,7 @@ contract SimpleAuction {
         // If functions called internally include interaction with external
         // contracts, they also have to be considered interaction with
         // external contracts.
+        require(withdrawCount[msg.sender] <= 1);
 
         // 1. Conditions
         if (block.timestamp < auctionEndTime)
@@ -144,6 +149,7 @@ contract SimpleAuction {
 
         // 3. Interaction
         beneficiary.transfer(highestBid);
+        assert(withdrawCount[msg.sender] <= 1);
     }
 
 //    function withdrawOnce(address p) public view {

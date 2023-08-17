@@ -1,0 +1,103 @@
+{
+  "_args": [
+    [
+      "@openzeppelin/contracts@^4.7.3",
+      "/home/lanlu/projects/contract-verification/solidity"
+    ]
+  ],
+  "_from": "@openzeppelin/contracts@>=4.7.3 <5.0.0",
+  "_hasShrinkwrap": false,
+  "_id": "@openzeppelin/contracts@4.7.3",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/@openzeppelin/contracts",
+  "_nodeVersion": "16.15.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/contracts_4.7.3_1660158542846_0.1110020017384099"
+  },
+  "_npmUser": {
+    "email": "frangio.1@gmail.com",
+    "name": "frangio"
+  },
+  "_npmVersion": "8.11.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "@openzeppelin/contracts",
+    "raw": "@openzeppelin/contracts@^4.7.3",
+    "rawSpec": "^4.7.3",
+    "scope": "@openzeppelin",
+    "spec": ">=4.7.3 <5.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.7.3.tgz",
+  "_shasum": "939534757a81f8d69cc854c7692805684ff3111e",
+  "_shrinkwrap": null,
+  "_spec": "@openzeppelin/contracts@^4.7.3",
+  "_where": "/home/lanlu/projects/contract-verification/solidity",
+  "author": {
+    "email": "maintainers@openzeppelin.org",
+    "name": "OpenZeppelin Community"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenZeppelin/openzeppelin-contracts/issues"
+  },
+  "dependencies": {},
+  "description": "Secure Smart Contract library for Solidity",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "fileCount": 323,
+    "integrity": "sha512-dGRS0agJzu8ybo44pCIf3xBaPQN/65AIXNgK8+4gzKd5kbvlqyxryUYVLJv7fK98Seyd2hDZzVEHSWAh0Bt1Yw==",
+    "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v4.10.10\r\nComment: https://openpgpjs.org\r\n\r\nwsFzBAEBCAAGBQJi9AJPACEJED1NWxICdlZqFiEECWMYAoorWMhJKdjhPU1b\r\nEgJ2Vmq2Vw//Ydy65GRSUOKHwLVOaQ8+hpq383y4+WAtWDunoQaR3yJATtRC\r\nsh/nVhxpew/+8opg8kvwYvI+xGqOGOXadQjUp4CkE09eFGa2cT1rdHTdhzf1\r\ncCsXBgZyh2R7GrnKnjhPLebZPKToVTANd9Uq35WRiLjBhxO1xgszApqii3Ch\r\n+fIGpHoDquUZhhnYPe3YxwYisBpv7bHxQNE/JPz0CpIOHFom+qtJW3ZbuNV0\r\nwUsX0GXkmG/MI0zBAaHsPmBZNbuPT/i+vQ56CGp6SnwRA6xVXlvaOhWkriNQ\r\nhMaByM7dddZVZngsYund0z6ttoVzueuuLvNWWflahWRu7mOZaJrkxGvEdSU6\r\nuCIxPuO0y/eqTs3btDzJml3URF4bQYZevlJ0/NkRrKEFvLqzfPs6m5YRv8LJ\r\n2BfpueyEfyvKbbJF7yDmh89x4CjCTo4cePJzKzJtFmttPmBYlcy7quLv27pa\r\n64Mwj43vX4vRnw7sbklMZsDaNJXKZp1uA4KKt2xEF5d0QlChsyXAYjEXYEp6\r\nutYozWNVuDHXi9xdYQQYXyhCr47xYnrfwTQMf/B6f1yGhBdT7RgfEL9+b+RH\r\n6qejW25yvscqbipm7EX5Gg2m2WRXG4JdLwqLt3XCg4RNJasD9f7RnZEQnIbz\r\nLupW/ldZikFH2hyVH2Mh0mKAJbAMqN/wlI8=\r\n=LI5e\r\n-----END PGP SIGNATURE-----\r\n",
+    "shasum": "939534757a81f8d69cc854c7692805684ff3111e",
+    "signatures": [
+      {
+        "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA",
+        "sig": "MEQCIHAojHGrqFtiTm9nfKaiHxGtzHybszMWSFhvc7GCljQMAiB7zuB2fB1mkh09obaKarzZsvLXLPUvg/kTxMU23u9grQ=="
+      }
+    ],
+    "tarball": "https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.7.3.tgz",
+    "unpackedSize": 1767747
+  },
+  "gitHead": "ecd2ca2cd7cac116f7a37d0e474bbb3d7d5e1c4d",
+  "homepage": "https://openzeppelin.com/contracts/",
+  "keywords": [
+    "contracts",
+    "ethereum",
+    "security",
+    "smart",
+    "solidity",
+    "zeppelin"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "ericglau",
+      "email": "ericglau@outlook.com"
+    },
+    {
+      "name": "frangio",
+      "email": "frangio.1@gmail.com"
+    },
+    {
+      "name": "amxx",
+      "email": "hadrien.croubois@gmail.com"
+    }
+  ],
+  "name": "@openzeppelin/contracts",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenZeppelin/openzeppelin-contracts.git"
+  },
+  "scripts": {
+    "prepare": "bash ../scripts/prepare-contracts-package.sh",
+    "prepare-docs": "cd ..; npm run prepare-docs"
+  },
+  "version": "4.7.3"
+}

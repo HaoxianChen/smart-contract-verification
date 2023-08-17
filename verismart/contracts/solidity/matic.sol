@@ -150,7 +150,7 @@ contract ERC20 is IERC20 {
     * @param to The address to transfer to.
     * @param value The amount to be transferred.
     */
-    function transfer(address to, uint256 value) virtual public returns (bool) {
+    function transfer(address to, uint256 value) public returns (bool) {
         _transfer(msg.sender, to, value);
         return true;
     }
@@ -164,7 +164,7 @@ contract ERC20 is IERC20 {
      * @param spender The address which will spend the funds.
      * @param value The amount of tokens to be spent.
      */
-    function approve(address spender, uint256 value) virtual public returns (bool) {
+    function approve(address spender, uint256 value) public returns (bool) {
         require(spender != address(0));
 
         _allowed[msg.sender][spender] = value;
@@ -180,7 +180,7 @@ contract ERC20 is IERC20 {
      * @param to address The address which you want to transfer to
      * @param value uint256 the amount of tokens to be transferred
      */
-    function transferFrom(address from, address to, uint256 value) virtual public returns (bool) {
+    function transferFrom(address from, address to, uint256 value) public returns (bool) {
         _allowed[from][msg.sender] = _allowed[from][msg.sender].sub(value);
         _transfer(from, to, value);
         emit Approval(from, msg.sender, _allowed[from][msg.sender]);
@@ -197,7 +197,7 @@ contract ERC20 is IERC20 {
      * @param spender The address which will spend the funds.
      * @param addedValue The amount of tokens to increase the allowance by.
      */
-    function increaseAllowance(address spender, uint256 addedValue) virtual public returns (bool) {
+    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
         require(spender != address(0));
 
         _allowed[msg.sender][spender] = _allowed[msg.sender][spender].add(addedValue);
@@ -215,7 +215,7 @@ contract ERC20 is IERC20 {
      * @param spender The address which will spend the funds.
      * @param subtractedValue The amount of tokens to decrease the allowance by.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) virtual public returns (bool) {
+    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
         require(spender != address(0));
 
         _allowed[msg.sender][spender] = _allowed[msg.sender][spender].sub(subtractedValue);
@@ -336,7 +336,7 @@ contract PauserRole {
 
     Roles.Role private _pausers;
 
-    constructor () {
+    constructor () public {
         _addPauser(msg.sender);
     }
 
@@ -381,7 +381,7 @@ contract Pausable is PauserRole {
     bool private _paused;
 
     // constructor () internal {
-    constructor () {
+    constructor () public {
         _paused = false;
     }
 
@@ -432,24 +432,24 @@ contract Pausable is PauserRole {
  * @dev ERC20 modified with pausable transfers.
  **/
 contract ERC20Pausable is ERC20, Pausable {
-    function transfer(address to, uint256 value) public override whenNotPaused returns (bool) {
+    function transfer(address to, uint256 value) public whenNotPaused returns (bool) {
         return super.transfer(to, value);
     }
 
     function transferFrom(address from, address to, uint256 value) public
-    override whenNotPaused returns (bool) {
+    whenNotPaused returns (bool) {
         return super.transferFrom(from, to, value);
     }
 
-    function approve(address spender, uint256 value) override public whenNotPaused returns (bool) {
+    function approve(address spender, uint256 value) public whenNotPaused returns (bool) {
         return super.approve(spender, value);
     }
 
-    function increaseAllowance(address spender, uint addedValue) override public whenNotPaused returns (bool success) {
+    function increaseAllowance(address spender, uint addedValue) public whenNotPaused returns (bool success) {
         return super.increaseAllowance(spender, addedValue);
     }
 
-    function decreaseAllowance(address spender, uint subtractedValue) override public whenNotPaused returns (bool success) {
+    function decreaseAllowance(address spender, uint subtractedValue) public whenNotPaused returns (bool success) {
         return super.decreaseAllowance(spender, subtractedValue);
     }
 }
@@ -462,12 +462,12 @@ contract ERC20Pausable is ERC20, Pausable {
  * All the operations are done using the smallest and indivisible token unit,
  * just as on Ethereum all the operations are done in wei.
  */
-abstract contract ERC20Detailed is IERC20 {
+contract ERC20Detailed is IERC20 {
     string private _name;
     string private _symbol;
     uint8 private _decimals;
 
-    constructor (string memory name, string memory symbol, uint8 decimals) {
+    constructor (string memory name, string memory symbol, uint8 decimals) public{
         _name = name;
         _symbol = symbol;
         _decimals = decimals;
@@ -499,7 +499,7 @@ abstract contract ERC20Detailed is IERC20 {
 
 contract MaticToken is ERC20Pausable, ERC20Detailed {
     constructor (string memory name, string memory symbol, uint8 decimals, uint256 totalSupply)
-    ERC20Detailed (name, symbol, decimals) {
+    ERC20Detailed (name, symbol, decimals) public{
         _mint(msg.sender, totalSupply);
     }
 

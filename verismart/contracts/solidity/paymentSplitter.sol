@@ -42,7 +42,7 @@ contract PaymentSplitter {
      * All addresses in `payees` must be non-zero. Both arrays must have the same non-zero length, and there must be no
      * duplicates in `payees`.
      */
-    constructor(address[] memory payees, uint256[] memory shares_) payable {
+    constructor(address[] memory payees, uint256[] memory shares_) payable public {
         require(payees.length == shares_.length, "PaymentSplitter: payees and shares length mismatch");
         require(payees.length > 0, "PaymentSplitter: no payees");
         require(address(this).balance == 0);
@@ -61,9 +61,9 @@ contract PaymentSplitter {
      * https://solidity.readthedocs.io/en/latest/contracts.html#fallback-function[fallback
      * functions].
      */
-    receive() external payable virtual {
-        emit PaymentReceived(msg.sender, msg.value);
-    }
+    // receive() external payable 
+    //     emit PaymentReceived(msg.sender, msg.value);
+    // }
 
     /**
      * @dev Getter for the total shares held by payees.
@@ -113,7 +113,11 @@ contract PaymentSplitter {
      * @dev Triggers a transfer to `account` of the amount of Ether they are owed, according to their percentage of the
      * total shares and their previous withdrawals.
      */
-    function release(address payable account) public virtual {
+    function release(address payable account) public {
+	    uint256 _totalReceived0 = address(this).balance + totalReleased();
+	    uint256 amount0 = shares(account) * _totalReceived0 / totalShares() ;
+	    assert(released(account) <= amount0);
+
         require(_shares[account] > 0, "PaymentSplitter: account has no shares");
 
         uint256 payment = releasable(account);
@@ -126,6 +130,9 @@ contract PaymentSplitter {
         // Address.sendValue(account, payment);
         account.transfer(payment);
         emit PaymentReleased(account, payment);
+	    uint256 _totalReceived = address(this).balance + totalReleased();
+	    uint256 amount = shares(account) * _totalReceived / totalShares() ;
+	    assert(released(account) <= amount);
     }
 
     /**
@@ -156,9 +163,9 @@ contract PaymentSplitter {
         emit PayeeAdded(account, shares_);
     }
 
-  function check(address p) public view {
-    uint256 _totalReceived = address(this).balance + totalReleased();
-    uint256 amount = shares(p) * _totalReceived / totalShares() ;
-    assert(released(p) <= amount);
-  }
+  // function check(address p) public view {
+  //   uint256 _totalReceived = address(this).balance + totalReleased();
+  //   uint256 amount = shares(p) * _totalReceived / totalShares() ;
+  //   assert(released(p) <= amount);
+  // }
 }

@@ -42,23 +42,29 @@ contract Erc1155 {
   constructor() public {
     updateOwnerOnInsertConstructor_r6();
   }
-  function transfer(uint tokenId,address to,uint amount) public  checkViolations  {
+  function transfer(uint tokenId,address to,uint amount) public  {
+    require(totalSupply[tokenId].n==totalBalances[tokenId].m);
       bool r9 = updateTransferOnInsertRecv_transfer_r9(tokenId,to,amount);
       if(r9==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply[tokenId].n==totalBalances[tokenId].m);
   }
-  function burn(uint tokenId,address p,uint amount) public  checkViolations  {
+  function burn(uint tokenId,address p,uint amount) public  {
+    require(totalSupply[tokenId].n==totalBalances[tokenId].m);
       bool r4 = updateBurnOnInsertRecv_burn_r4(tokenId,p,amount);
       if(r4==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply[tokenId].n==totalBalances[tokenId].m);
   }
-  function transferFrom(uint tokenId,address from,address to,uint amount) public  checkViolations  {
+  function transferFrom(uint tokenId,address from,address to,uint amount) public  {
+    require(totalSupply[tokenId].n==totalBalances[tokenId].m);
       bool r18 = updateTransferFromOnInsertRecv_transferFrom_r18(tokenId,from,to,amount);
       if(r18==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply[tokenId].n==totalBalances[tokenId].m);
   }
   function getAllowance(uint tokenId,address p,address s) public view  returns (uint) {
       AllowanceTuple memory allowanceTuple = allowance[tokenId][p][s];
@@ -70,22 +76,26 @@ contract Erc1155 {
       uint n = balanceOfTuple.n;
       return n;
   }
-  function approve(uint tokenId,address s,uint n) public  checkViolations  {
+  function approve(uint tokenId,address s,uint n) public  {
+    require(totalSupply[tokenId].n==totalBalances[tokenId].m);
       bool r1 = updateIncreaseAllowanceOnInsertRecv_approve_r1(tokenId,s,n);
       if(r1==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply[tokenId].n==totalBalances[tokenId].m);
   }
   function getTotalSupply(uint tokenId) public view  returns (uint) {
       TotalSupplyTuple memory totalSupplyTuple = totalSupply[tokenId];
       uint n = totalSupplyTuple.n;
       return n;
   }
-  function mint(uint tokenId,address p,uint amount) public  checkViolations  {
+  function mint(uint tokenId,address p,uint amount) public  {
+    require(totalSupply[tokenId].n==totalBalances[tokenId].m);
       bool r7 = updateMintOnInsertRecv_mint_r7(tokenId,p,amount);
       if(r7==false) {
         revert("Rule condition failed");
       }
+    assert(totalSupply[tokenId].n==totalBalances[tokenId].m);
   }
   function checkUnequalBalance() private    {
       uint N = unequalBalanceKeyArray.length;

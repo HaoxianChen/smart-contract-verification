@@ -38,19 +38,19 @@ library SafeMath {
   }
 }
 
-abstract contract ERC20 {
+contract ERC20 {
 
-    function totalSupply() virtual public view returns (uint);
+    function totalSupply()   public view returns (uint);
     
-    function balanceOf(address _owner) virtual public view returns (uint);
+    function balanceOf(address _owner)   public view returns (uint);
     
-    function transfer(address _to, uint _value) virtual public returns (bool);
+    function transfer(address _to, uint _value)   public returns (bool);
     
-    function transferFrom(address _from, address _to, uint _value) virtual public returns (bool);
+    function transferFrom(address _from, address _to, uint _value)   public returns (bool);
     
-    function approve(address _spender, uint _value) virtual public returns (bool);
+    function approve(address _spender, uint _value)   public returns (bool);
     
-    function allowance(address _owner, address _spender) virtual public view returns (uint);
+    function allowance(address _owner, address _spender)   public view returns (uint);
 
     event Transfer(address indexed _from, address indexed _to, uint _value);
     
@@ -70,15 +70,15 @@ contract StandardToken is ERC20 {
     
     mapping (address => mapping (address => uint)) allowed;
 
-    function totalSupply() override public view returns (uint) {
+    function totalSupply() public view returns (uint) {
         return _totalSupply;
     }
 
-    function balanceOf(address _owner) override public view returns (uint balance) {
+    function balanceOf(address _owner) public view returns (uint balance) {
         return balances[_owner];
     }
 
-    function transfer(address _to, uint _value) override virtual public returns (bool success) {
+    function transfer(address _to, uint _value)   public returns (bool success) {
         require(balances[msg.sender] >= _value && _value > 0);
         
         balances[msg.sender] = balances[msg.sender].sub(_value);
@@ -90,7 +90,7 @@ contract StandardToken is ERC20 {
         return true;
     }
 
-    function transferFrom(address _from, address _to, uint _value) override virtual public returns (bool success) {
+    function transferFrom(address _from, address _to, uint _value)   public returns (bool success) {
         require(balances[_from] >= _value && allowed[_from][msg.sender] >= _value && _value > 0);
         
         balances[_from] = balances[_from].sub(_value);
@@ -103,7 +103,7 @@ contract StandardToken is ERC20 {
         return true;
     }
 
-    function approve(address _spender, uint _value) override public returns (bool success) {
+    function approve(address _spender, uint _value) public returns (bool success) {
         // https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
         if ((_value != 0) && (allowed[msg.sender][_spender] != 0)) {
             revert();
@@ -113,7 +113,7 @@ contract StandardToken is ERC20 {
         return true;
     }
 
-    function allowance(address _owner, address _spender) override public view returns (uint remaining) {
+    function allowance(address _owner, address _spender) public view returns (uint remaining) {
         return allowed[_owner][_spender];
     }
 
@@ -123,7 +123,7 @@ contract Controlled {
 
     address public controller;
 
-    constructor() {
+    constructor() public {
         controller = msg.sender;
     }
 
@@ -159,16 +159,24 @@ contract ThetaToken is StandardToken, Controlled {
     // for token circulation on platforms that integrate Theta before unlockTime
     mapping (address => bool) internal precirculated;
 
-    constructor (uint _unlockTime) {
+    constructor (uint _unlockTime) public {
         unlockTime = _unlockTime;
     }
 
-    function transfer(address _to, uint _amount) can_transfer(msg.sender, _to) override public returns (bool success) {
-        return super.transfer(_to, _amount);
+    function transfer(address _to, uint _amount) can_transfer(msg.sender, _to) public returns (bool success) {
+        // return super.transfer(_to, _amount);
+      require(balanceTotal == totalSupply());
+        bool ret = super.transfer(_to, _amount);
+      assert(balanceTotal == totalSupply());
+	return ret;
     }
 
-    function transferFrom(address _from, address _to, uint _amount) override can_transfer(_from, _to) public returns (bool success) {
-        return super.transferFrom(_from, _to, _amount);
+    function transferFrom(address _from, address _to, uint _amount) can_transfer(_from, _to) public returns (bool success) {
+        // return super.transferFrom(_from, _to, _amount);
+      require(balanceTotal == totalSupply());
+	bool ret = super.transferFrom(_from, _to, _amount);
+      assert(balanceTotal == totalSupply());
+	return ret;
     }
 
     function mint(address _owner, uint _amount) external only_controller returns (bool) {
@@ -205,8 +213,8 @@ contract ThetaToken is StandardToken, Controlled {
         _;
     }
 
-    function check() public view {
-      assert(balanceTotal == totalSupply());
-    }
+    // function check() public view {
+    //   assert(balanceTotal == totalSupply());
+    // }
 
 }

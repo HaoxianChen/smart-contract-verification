@@ -261,7 +261,10 @@ contract LinkToken is StandardToken {
     public validRecipient(_to)
     returns (bool)
   {
-    return super.transfer(_to, _value);
+    require(balanceTotal == totalSupply);
+    // return super.transfer(_to, _value);
+    bool ret = super.transfer(_to, _value);
+    assert(balanceTotal == totalSupply);
   }
 
   /**
@@ -274,7 +277,10 @@ contract LinkToken is StandardToken {
     validRecipient(_spender)
     returns (bool)
   {
-    return super.approve(_spender,  _value);
+    // return super.approve(_spender,  _value);
+    require(balanceTotal == totalSupply);
+    bool ret = super.approve(_spender,  _value);
+    assert(balanceTotal == totalSupply);
   }
 
   /**
@@ -288,7 +294,10 @@ contract LinkToken is StandardToken {
     validRecipient(_to)
     returns (bool)
   {
-    return super.transferFrom(_from, _to, _value);
+    require(balanceTotal == totalSupply);
+    bool ret = super.transferFrom(_from, _to, _value);
+    assert(balanceTotal == totalSupply);
+	return ret;
   }
 
 
@@ -299,8 +308,8 @@ contract LinkToken is StandardToken {
     _;
   }
 
-  function check() public view {
-    assert(balanceTotal == totalSupply);
-  }
+  // function check() public view {
+  //   assert(balanceTotal == totalSupply);
+  // }
 
 }

@@ -195,6 +195,8 @@ contract Wallet {
       }
   }
   function updateMintOnInsertRecv_mint_r11(address p,int n) private   returns (bool) {
+
+    require(balanceOf[p].n >= 0);
       if(true) {
         address s = owner.p;
         if(s==msg.sender) {
@@ -202,6 +204,7 @@ contract Wallet {
             updateAllMintOnInsertMint_r0(n);
             updateTransferOnInsertMint_r12(p,n);
             emit Mint(p,n);
+    assert(balanceOf[p].n >= 0);
             return true;
           }
         }
@@ -209,7 +212,7 @@ contract Wallet {
       return false;
   }
 
-  function checkNegativeBalance(address p) public view {
-    assert(balanceOf[p].n >= 0);
-  }
+  // function checkNegativeBalance(address p) public view {
+  //   assert(balanceOf[p].n >= 0);
+  // }
 }

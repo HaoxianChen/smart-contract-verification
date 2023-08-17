@@ -1,6 +1,6 @@
 contract VestingWallet {
   struct BeneficiaryTuple {
-    address p;
+    address payable p;
     bool _valid;
   }
   struct DurationTuple {
@@ -20,17 +20,19 @@ contract VestingWallet {
   DurationTuple duration;
   StartTuple start;
   event Release(uint n);
-  constructor(uint s,uint d,address b) {
+  constructor(uint s,uint d,address payable b) public {
     updateStartOnInsertConstructor_r1(s);
     updateDurationOnInsertConstructor_r6(d);
     updateBeneficiaryOnInsertConstructor_r5(b);
   }
   function release() public    {
+    require(released.n == 0 || block.timestamp >= start.t);
       bool r7 = updateReleaseOnInsertRecv_release_r7();
       bool r8 = updateReleaseOnInsertRecv_release_r8();
       if(r7==false && r8==false) {
         revert("Rule condition failed");
       }
+    assert(released.n == 0 || block.timestamp >= start.t);
   }
   function getReleased() public view  returns (uint) {
       uint n = released.n;
@@ -61,16 +63,16 @@ contract VestingWallet {
       uint convertedValue = uint(value);
       return convertedValue;
   }
-  function updateBeneficiaryOnInsertConstructor_r5(address b) private    {
+  function updateBeneficiaryOnInsertConstructor_r5(address payable b) private    {
       if(true) {
         beneficiary = BeneficiaryTuple(b,true);
       }
   }
   function updateSendOnInsertRelease_r2(uint n) private    {
       if(true) {
-        address b = beneficiary.p;
+        address payable b = beneficiary.p;
         if(n>0) {
-          payable(b).transfer(n);
+          b.transfer(n);
         }
       }
   }

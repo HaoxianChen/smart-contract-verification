@@ -10,7 +10,7 @@ contract Voting {
 
   uint32 quorum;
 
-  constructor (address[] memory voters, uint32 _quorum) {
+  constructor (address[] memory voters, uint32 _quorum) public {
     for (uint i = 0; i < voters.length; i++) {
       isVoter[voters[i]] = true;
     }
