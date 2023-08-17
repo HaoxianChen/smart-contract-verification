@@ -1,11 +1,7 @@
 # Artifact for Safety Verification of Declarative Smart Contracts
 
 This artifact contains the benchmarks, binaries, and scripts to reproduce the 
-to reproduce the experimental results of the corresponding paper (Table 2).
-
-The artifact has been tested on the TACAS 2023 Artifact Evaluation Virtual
-Machine for VirtualBox [available via
-Zenodo](https://doi.org/10.5281/zenodo.7113223).
+the experimental results of the corresponding paper (Table 2).
 
 ## EXPERIMENT RUNTIME
 The expected runtime is 11 hours with single thread, 
