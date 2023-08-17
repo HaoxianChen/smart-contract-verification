@@ -25,3 +25,10 @@ python3 check-all.py $TIMEOUT $NTHREADS solidity ../output/solc/reference
 python3 check-all.py $TIMEOUT $NTHREADS dsc-instrument ../output/solc/decon
 cd ..
 
+# Run verismart
+mkdir -p output/verismart/reference
+mkdir -p output/verismart/decon
+cd verismart 
+python3 check-all.py $TIMEOUT $NTHREADS contracts/solidity ../output/verismart/reference 
+python3 check-all.py $TIMEOUT $NTHREADS contracts/dsc-instrument ../output/verismart/decon
+cd ..
