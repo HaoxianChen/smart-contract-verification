@@ -53,9 +53,9 @@ This also means the assertion cannot be verified,
 and is reported as unknown in Table 2.
 * Similarly, time exceeding timeout parameter would be reported as timeout
 instead.
-* Some contracts may return 
-``solc-verify error: Error(s) while translating annotation for node``,
-which is reported as error in Table 2.
+* Some contracts may return ``solc-verify error: [...]``, with errors are caused by 
+encountering unsupported language features.
+These results are are reported as error in Table 2.
 * Otherwise, the verification succeeds, and the time is reported in Table 2.
 
 
