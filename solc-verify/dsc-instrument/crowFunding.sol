@@ -1,7 +1,6 @@
 /**
-* @notice invariant (totalBalance.m == raised.n || closed.b)
+* @notice invariant ((onceRefund.b && onceWithdraw.b))
 */
-
 contract CrowFunding {
   struct TargetTuple {
     uint t;
@@ -16,6 +15,17 @@ contract CrowFunding {
     bool _valid;
   }
   struct ClosedTuple {
+    bool b;
+    bool _valid;
+  }
+  struct OnceRefundTuple {
+    bool b;
+    bool _valid;
+  }
+  struct IllegalRefundTuple {
+    bool _valid;
+  }
+  struct OnceWithdrawTuple {
     bool b;
     bool _valid;
   }
@@ -36,112 +46,237 @@ contract CrowFunding {
     uint n;
     bool _valid;
   }
+  struct RefundAndWithdrawTuple {
+    bool _valid;
+  }
   TargetTuple target;
   RaisedTuple raised;
   ClosedTuple closed;
+  OnceRefundTuple onceRefund;
+  IllegalRefundTuple illegalRefund;
+  OnceWithdrawTuple onceWithdraw;
   TotalBalanceTuple totalBalance;
-  mapping(address=>BalanceOfTuple) balanceOf;
   OwnerTuple owner;
   BeneficiaryTuple beneficiary;
   MissingFundTuple missingFund;
+  mapping(address=>BalanceOfTuple) balanceOf;
+  RefundAndWithdrawTuple refundAndWithdraw;
   event Refund(address p,uint n);
   event Invest(address p,uint n);
   event Closed(bool b);
   event Withdraw(address p,uint n);
   constructor(uint t,address b) public {
-    updateTotalBalanceOnInsertConstructor_r12();
-    updateRaisedOnInsertConstructor_r8();
-    updateOwnerOnInsertConstructor_r9();
-    updateTargetOnInsertConstructor_r2(t);
-    updateBeneficiaryOnInsertConstructor_r16(b);
-  }
-  function getRaised() public view  returns (uint) {
-      uint n = raised.n;
-      return n;
+    updateOnceRefundOnInsertConstructor_r13();
+    updateTotalBalanceOnInsertConstructor_r18();
+    updateRaisedOnInsertConstructor_r7();
+    updateOwnerOnInsertConstructor_r8();
+    updateTargetOnInsertConstructor_r15(t);
+    updateBeneficiaryOnInsertConstructor_r22(b);
+    updateOnceWithdrawOnInsertConstructor_r16();
   }
   function getClosed() public view  returns (bool) {
       bool b = closed.b;
       return b;
   }
-  function refund() public  checkViolations  {
-      bool r5 = updateRefundOnInsertRecv_refund_r5();
-      if(r5==false) {
-        revert("Rule condition failed");
-      }
-  }
-  function withdraw() public  checkViolations  {
+  function withdraw() public {
       bool r10 = updateWithdrawOnInsertRecv_withdraw_r10();
       if(r10==false) {
         revert("Rule condition failed");
       }
   }
-  function close() public  checkViolations  {
+  function close() public  {
       bool r11 = updateClosedOnInsertRecv_close_r11();
       if(r11==false) {
         revert("Rule condition failed");
       }
   }
-  function invest() public  checkViolations payable  {
-      bool r6 = updateInvestOnInsertRecv_invest_r6();
-      if(r6==false) {
+  function invest() public  payable  {
+      bool r5 = updateInvestOnInsertRecv_invest_r5();
+      if(r5==false) {
         revert("Rule condition failed");
       }
   }
-  function checkMissingFund() private    {
-      MissingFundTuple memory missingFundTuple = missingFund;
-      if(missingFundTuple._valid==true) {
-        revert("missingFund");
+  function refund() public  {
+      bool r4 = updateRefundOnInsertRecv_refund_r4();
+      if(r4==false) {
+        revert("Rule condition failed");
       }
   }
-  modifier checkViolations() {
-      // Empty()
-      _;
-      checkMissingFund();
+  function getRaised() public view  returns (uint) {
+      uint n = raised.n;
+      return n;
   }
-  function updateMissingFundOnInsertRaised_r3(uint r) private    {
-      RaisedTuple memory toDelete = raised;
-      if(toDelete._valid==true) {
-        updateMissingFundOnDeleteRaised_r3(toDelete.n);
-      }
-      if(true) {
-        bool b = closed.b;
-        if(true) {
-          uint m = totalBalance.m;
-          if(m!=r && b==false) {
-            missingFund = MissingFundTuple(m,r,true);
-          }
-        }
-      }
+  // function checkMissingFund() private    {
+  //     MissingFundTuple memory missingFundTuple = missingFund;
+  //     if(missingFundTuple._valid==true) {
+  //       // assert(false);
+  //       revert("missingFund");
+  //     }
+  // }
+  // function checkRefundAndWithdraw() private    {
+  //     RefundAndWithdrawTuple memory refundAndWithdrawTuple = refundAndWithdraw;
+  //     if(refundAndWithdrawTuple._valid==true) {
+  // 	// assert(false);
+  //       revert("refundAndWithdraw");
+  //     }
+  // }
+  // function checkIllegalRefund() private    {
+  //     IllegalRefundTuple memory illegalRefundTuple = illegalRefund;
+  //     if(illegalRefundTuple._valid==true) {
+  //       // assert(false);
+  //       revert("illegalRefund");
+  //     }
+  // }
+  // modifier checkViolations() {
+  //     // Empty()
+  //     _;
+  //     // checkMissingFund();
+  //     // checkRefundAndWithdraw();
+  //     // checkIllegalRefund();
+  // }
+  function updateOnceRefundOnInsertConstructor_r13() private    {
+      updateRefundAndWithdrawOnInsertOnceRefund_r1(bool(false));
+      updateIllegalRefundOnInsertOnceRefund_r9(bool(false));
+      onceRefund = OnceRefundTuple(false,true);
+      onceWithdraw = OnceWithdrawTuple(false,true);
   }
-  function updateMissingFundOnIncrementRaised_r3(int r) private    {
+  function updateRefundAndWithdrawOnInsertOnceRefund_r1(bool b) private    {
+if (b) {
+      if(onceWithdraw.b) {
+        refundAndWithdraw = RefundAndWithdrawTuple(true);
+      }
+}
+  }
+  function updateIllegalRefundOnInsertOnceRefund_r9(bool b) private    {
+if (b) {
+      uint t = target.t;
+      uint r = raised.n;
+      if(r>=t) {
+        illegalRefund = IllegalRefundTuple(true);
+      }
+}
+  }
+  function updateSendOnInsertWithdraw_r12(address p,uint r) private    {
+      payable(p).send(r);
+  }
+  function updateOnceRefundOnInsertRefund_r2() private    {
+      updateIllegalRefundOnInsertOnceRefund_r9(bool(true));
+      updateRefundAndWithdrawOnInsertOnceRefund_r1(bool(true));
+      onceRefund = OnceRefundTuple(true,true);
+  }
+  function updateMissingFundOnIncrementRaised_r14(int r) private    {
       int _delta = int(r);
       uint newValue = updateuintByint(raised.n,_delta);
-      updateMissingFundOnInsertRaised_r3(newValue);
+      updateMissingFundOnInsertRaised_r14(newValue);
+      updateIllegalRefundOnInsertRaised_r9(newValue);
   }
-  function updateRefundTotalOnInsertRefund_r14(address p,uint m) private    {
-      int delta = int(m);
-      updateBalanceOfOnIncrementRefundTotal_r4(p,delta);
+  function updateOnceWithdrawOnInsertWithdraw_r17() private    {
+      updateRefundAndWithdrawOnInsertOnceWithdraw_r1(bool(true));
+      onceWithdraw = OnceWithdrawTuple(true,true);
   }
-  function updateBalanceOfOnIncrementRefundTotal_r4(address p,int r) private    {
-      int delta = int(-r);
-      updateTotalBalanceOnIncrementBalanceOf_r15(delta);
+  function updateOwnerOnInsertConstructor_r8() private    {
+      address p = msg.sender;
+      owner = OwnerTuple(p,true);
+  }
+  function updateTotalBalanceOnIncrementBalanceOf_r21(int n) private    {
+      int delta1 = int(n);
+      updateMissingFundOnIncrementTotalBalance_r14(delta1);
+      int _delta = int(n);
+      uint newValue = updateuintByint(totalBalance.m,_delta);
+      totalBalance.m = newValue;
+  }
+  function updateSendOnInsertRefund_r0(address p,uint n) private    {
+      payable(p).send(n);
+  }
+  function updateBalanceOfOnIncrementInvestTotal_r3(address p,int i) private    {
+      int delta0 = int(i);
+      updateTotalBalanceOnIncrementBalanceOf_r21(delta0);
+      int _delta = int(i);
+      uint newValue = updateuintByint(balanceOf[p].n,_delta);
+      balanceOf[p].n = newValue;
+  }
+  function updateInvestTotalOnInsertInvest_r6(address p,uint m) private    {
+      int delta0 = int(m);
+      updateBalanceOfOnIncrementInvestTotal_r3(p,delta0);
+  }
+  function updateBeneficiaryOnInsertConstructor_r22(address p) private    {
+      beneficiary = BeneficiaryTuple(p,true);
+  }
+  function updateBalanceOfOnIncrementRefundTotal_r3(address p,int r) private    {
+      int delta0 = int(-r);
+      updateTotalBalanceOnIncrementBalanceOf_r21(delta0);
       int _delta = int(-r);
       uint newValue = updateuintByint(balanceOf[p].n,_delta);
       balanceOf[p].n = newValue;
   }
-  function updateMissingFundOnInsertTotalBalance_r3(uint m) private    {
-      TotalBalanceTuple memory toDelete = totalBalance;
-      if(toDelete._valid==true) {
-        updateMissingFundOnDeleteTotalBalance_r3(toDelete.m);
+  function updateMissingFundOnIncrementTotalBalance_r14(int m) private    {
+      int _delta = int(m);
+      uint newValue = updateuintByint(totalBalance.m,_delta);
+      updateMissingFundOnInsertTotalBalance_r14(newValue);
+  }
+  function updateRaisedOnInsertConstructor_r7() private    {
+      updateMissingFundOnInsertRaised_r14(uint(0));
+      updateIllegalRefundOnInsertRaised_r9(uint(0));
+      raised = RaisedTuple(0,true);
+  }
+  function updateMissingFundOnInsertRaised_r14(uint r) private    {
+      bool b = closed.b;
+      uint m = totalBalance.m;
+      if(m!=r && b==false) {
+        missingFund = MissingFundTuple(m,r,true);
       }
-      if(true) {
-        bool b = closed.b;
-        if(true) {
-          uint r = raised.n;
-          if(m!=r && b==false) {
-            missingFund = MissingFundTuple(m,r,true);
-          }
+  }
+  function updateRefundOnInsertRecv_refund_r4() private   returns (bool) {
+      if(true==closed.b) {
+        address p = msg.sender;
+        uint t = target.t;
+        uint r = raised.n;
+        uint n = balanceOf[p].n;
+        if(r<t && n>0) {
+          updateOnceRefundOnInsertRefund_r2();
+          updateSendOnInsertRefund_r0(p,n);
+          updateRefundTotalOnInsertRefund_r20(p,n);
+          emit Refund(p,n);
+          return true;
         }
+      }
+      return false;
+  }
+  function updateOnceWithdrawOnInsertConstructor_r16() private    {
+      updateRefundAndWithdrawOnInsertOnceWithdraw_r1(bool(false));
+      onceWithdraw = OnceWithdrawTuple(false,true);
+  }
+  function updateTotalBalanceOnInsertConstructor_r18() private    {
+      updateMissingFundOnInsertTotalBalance_r14(uint(0));
+      totalBalance = TotalBalanceTuple(0,true);
+  }
+  function updateIllegalRefundOnInsertRaised_r9(uint r) private    {
+      uint t = target.t;
+      if(true==onceRefund.b) {
+        if(r>=t) {
+          illegalRefund = IllegalRefundTuple(true);
+        }
+      }
+  }
+  function updateWithdrawOnInsertRecv_withdraw_r10() private   returns (bool) {
+      address p = beneficiary.p;
+      uint t = target.t;
+      uint r = raised.n;
+      if(p==msg.sender) {
+        if(r>=t) {
+          updateSendOnInsertWithdraw_r12(p,r);
+          updateOnceWithdrawOnInsertWithdraw_r17();
+          emit Withdraw(p,r);
+          return true;
+        }
+      }
+      return false;
+  }
+  function updateMissingFundOnInsertTotalBalance_r14(uint m) private    {
+      bool b = closed.b;
+      uint r = raised.n;
+      if(m!=r && b==false) {
+        missingFund = MissingFundTuple(m,r,true);
       }
   }
   function updateuintByint(uint x,int delta) private   returns (uint) {
@@ -150,194 +285,64 @@ contract CrowFunding {
       uint convertedValue = uint(value);
       return convertedValue;
   }
-  function updateMissingFundOnIncrementTotalBalance_r3(int m) private    {
-      int _delta = int(m);
-      uint newValue = updateuintByint(totalBalance.m,_delta);
-      updateMissingFundOnInsertTotalBalance_r3(newValue);
-  }
-  function updateInvestTotalOnInsertInvest_r7(address p,uint m) private    {
-      int delta = int(m);
-      updateBalanceOfOnIncrementInvestTotal_r4(p,delta);
-  }
-  function updateBeneficiaryOnInsertConstructor_r16(address p) private    {
-      if(true) {
-        beneficiary = BeneficiaryTuple(p,true);
+  function updateRefundAndWithdrawOnInsertOnceWithdraw_r1(bool b) private    {
+if (b) {
+      if(true==onceRefund.b) {
+        refundAndWithdraw = RefundAndWithdrawTuple(true);
       }
+}
+  }
+  function updateMissingFundOnInsertClosed_r14(bool b) private    {
+      uint r = raised.n;
+      uint m = totalBalance.m;
+      if(m!=r && b==false) {
+        missingFund = MissingFundTuple(m,r,true);
+      }
+  }
+  function updateInvestOnInsertRecv_invest_r5() private   returns (bool) {
+      if(false==closed.b) {
+        uint s = raised.n;
+        uint t = target.t;
+        uint n = msg.value;
+        address p = msg.sender;
+        if(s<t) {
+          updateInvestTotalOnInsertInvest_r6(p,n);
+          updateRaisedOnInsertInvest_r19(n);
+          emit Invest(p,n);
+          return true;
+        }
+      }
+      return false;
+  }
+  function updateTargetOnInsertConstructor_r15(uint t) private    {
+      target = TargetTuple(t,true);
+  }
+  function updateRaisedOnInsertInvest_r19(uint m) private    {
+      int delta3 = int(m);
+      updateIllegalRefundOnIncrementRaised_r9(delta3);
+      int delta2 = int(m);
+      updateMissingFundOnIncrementRaised_r14(delta2);
+      raised.n += m;
+  }
+  function updateRefundTotalOnInsertRefund_r20(address p,uint m) private    {
+      int delta0 = int(m);
+      updateBalanceOfOnIncrementRefundTotal_r3(p,delta0);
   }
   function updateClosedOnInsertRecv_close_r11() private   returns (bool) {
-      if(true) {
-        address s = owner.p;
-        if(s==msg.sender) {
-          if(true) {
-            updateMissingFundOnInsertClosed_r3(bool(true));
-            closed = ClosedTuple(true,true);
-            emit Closed(true);
-            return true;
-          }
-        }
+      address s = owner.p;
+      if(s==msg.sender) {
+        updateMissingFundOnInsertClosed_r14(bool(true));
+        closed = ClosedTuple(true,true);
+        emit Closed(true);
+        return true;
       }
       return false;
   }
-  function updateMissingFundOnDeleteTotalBalance_r3(uint m) private    {
-      if(true) {
-        bool b = closed.b;
-        if(true) {
-          uint r = raised.n;
-          if(m!=r && b==false) {
-            missingFund = MissingFundTuple(0,0,false);
-          }
-        }
-      }
-  }
-  function updateBalanceOfOnIncrementInvestTotal_r4(address p,int i) private    {
-      int delta = int(i);
-      updateTotalBalanceOnIncrementBalanceOf_r15(delta);
-      int _delta = int(i);
-      uint newValue = updateuintByint(balanceOf[p].n,_delta);
-      balanceOf[p].n = newValue;
-  }
-  function updateRaisedOnInsertInvest_r13(uint m) private    {
-      int delta = int(m);
-      updateMissingFundOnIncrementRaised_r3(delta);
-      int _delta = int(m);
+  function updateIllegalRefundOnIncrementRaised_r9(int r) private    {
+      int _delta = int(r);
       uint newValue = updateuintByint(raised.n,_delta);
-      raised.n = newValue;
-  }
-  function updateOwnerOnInsertConstructor_r9() private    {
-      if(true) {
-        address p = msg.sender;
-        if(true) {
-          owner = OwnerTuple(p,true);
-        }
-      }
-  }
-  function updateWithdrawOnInsertRecv_withdraw_r10() private   returns (bool) {
-      if(true) {
-        address p = beneficiary.p;
-        if(true) {
-          uint t = target.t;
-          if(true) {
-            uint r = raised.n;
-            if(p==msg.sender) {
-              if(r>=t) {
-                emit Withdraw(p,r);
-                return true;
-              }
-            }
-          }
-        }
-      }
-      return false;
-  }
-  function updateTotalBalanceOnIncrementBalanceOf_r15(int n) private    {
-      int delta = int(n);
-      updateMissingFundOnIncrementTotalBalance_r3(delta);
-      int _delta = int(n);
-      uint newValue = updateuintByint(totalBalance.m,_delta);
-      totalBalance.m = newValue;
-  }
-  function updateTargetOnInsertConstructor_r2(uint t) private    {
-      if(true) {
-        target = TargetTuple(t,true);
-      }
-  }
-  function updateRaisedOnInsertConstructor_r8() private    {
-      if(true) {
-        updateMissingFundOnInsertRaised_r3(uint(0));
-        raised = RaisedTuple(0,true);
-      }
-  }
-  function updateRefundOnInsertRecv_refund_r5() private   returns (bool) {
-      if(true==closed.b) {
-        if(true) {
-          address p = msg.sender;
-          if(true) {
-            uint t = target.t;
-            if(true) {
-              uint r = raised.n;
-              BalanceOfTuple memory balanceOfTuple = balanceOf[p];
-              if(true) {
-                uint n = balanceOfTuple.n;
-                if(r<t && n>0) {
-                  updateRefundTotalOnInsertRefund_r14(p,n);
-                  emit Refund(p,n);
-                  return true;
-                }
-              }
-            }
-          }
-        }
-      }
-      return false;
-  }
-  function updateMissingFundOnDeleteRaised_r3(uint r) private    {
-      if(true) {
-        bool b = closed.b;
-        if(true) {
-          uint m = totalBalance.m;
-          if(m!=r && b==false) {
-            missingFund = MissingFundTuple(0,0,false);
-          }
-        }
-      }
-  }
-  function updateMissingFundOnInsertClosed_r3(bool b) private    {
-      ClosedTuple memory toDelete = closed;
-      if(toDelete._valid==true) {
-        updateMissingFundOnDeleteClosed_r3(toDelete.b);
-      }
-      if(true) {
-        uint r = raised.n;
-        if(true) {
-          uint m = totalBalance.m;
-          if(m!=r && b==false) {
-            missingFund = MissingFundTuple(m,r,true);
-          }
-        }
-      }
-  }
-  function updateInvestOnInsertRecv_invest_r6() private   returns (bool) {
-      if(false==closed.b) {
-        if(true) {
-          uint s = raised.n;
-          if(true) {
-            uint t = target.t;
-            if(true) {
-              uint n = msg.value;
-              if(true) {
-                address p = msg.sender;
-                if(s<t) {
-                  updateInvestTotalOnInsertInvest_r7(p,n);
-                  updateRaisedOnInsertInvest_r13(n);
-                  emit Invest(p,n);
-                  return true;
-                }
-              }
-            }
-          }
-        }
-      }
-      return false;
-  }
-  function updateMissingFundOnDeleteClosed_r3(bool b) private    {
-      if(true) {
-        uint r = raised.n;
-        if(true) {
-          uint m = totalBalance.m;
-          if(m!=r && b==false) {
-            missingFund = MissingFundTuple(0,0,false);
-          }
-        }
-      }
-  }
-  function updateTotalBalanceOnInsertConstructor_r12() private    {
-      if(true) {
-        updateMissingFundOnInsertTotalBalance_r3(uint(0));
-        totalBalance = TotalBalanceTuple(0,true);
-      }
+      updateMissingFundOnInsertRaised_r14(newValue);
+      updateIllegalRefundOnInsertRaised_r9(newValue);
   }
 
-  //function check() public view {
-    //assert(totalBalance.m == raised.n || closed.b);
-  //}
 }
