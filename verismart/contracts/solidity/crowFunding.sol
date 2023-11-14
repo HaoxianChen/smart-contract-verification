@@ -11,6 +11,10 @@ contract Escrow {
   address payable beneficiary;
   uint256 totalFunds;
   uint256 raised;
+  uint256 goal = 10000 * 10**18;
+
+  bool onceRefund;
+  bool onceWithdraw;
 
   constructor(address payable b) public {
     beneficiary = b;
@@ -42,6 +46,7 @@ contract Escrow {
     deposits[p] = 0;
     p.transfer(amount);
     totalFunds -= amount;
+    onceRefund = true;
     assert(totalFunds == raised || state != State.OPEN);
   }
 
@@ -51,6 +56,12 @@ contract Escrow {
  // function check() public view {
  //   assert(totalFunds == raised || state != State.OPEN);
  // }
+  function checkRefundWithdraw() public view {
+     assert(!(onceRefund && onceWithdraw));
+  }
+  function checkRefundAndRaised() public view {
+     assert(!(onceRefund && (raised >= goal)));
+  }
 }
 
 // contract Crowdsale {
