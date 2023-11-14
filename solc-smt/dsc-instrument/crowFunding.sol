@@ -75,25 +75,25 @@ contract CrowFunding {
       bool b = closed.b;
       return b;
   }
-  function withdraw() public  checkViolations  {
+  function withdraw() public  {
       bool r10 = updateWithdrawOnInsertRecv_withdraw_r10();
       if(r10==false) {
         revert("Rule condition failed");
       }
   }
-  function close() public  checkViolations  {
+  function close() public  {
       bool r11 = updateClosedOnInsertRecv_close_r11();
       if(r11==false) {
         revert("Rule condition failed");
       }
   }
-  function invest() public  checkViolations payable  {
+  function invest() public  payable  {
       bool r5 = updateInvestOnInsertRecv_invest_r5();
       if(r5==false) {
         revert("Rule condition failed");
       }
   }
-  function refund() public  checkViolations  {
+  function refund() public  {
       bool r4 = updateRefundOnInsertRecv_refund_r4();
       if(r4==false) {
         revert("Rule condition failed");
@@ -102,34 +102,6 @@ contract CrowFunding {
   function getRaised() public view  returns (uint) {
       uint n = raised.n;
       return n;
-  }
-  function checkMissingFund() private    {
-      MissingFundTuple memory missingFundTuple = missingFund;
-      if(missingFundTuple._valid==true) {
-	assert(false);
-        revert("missingFund");
-      }
-  }
-  function checkRefundAndWithdraw() private    {
-      RefundAndWithdrawTuple memory refundAndWithdrawTuple = refundAndWithdraw;
-      if(refundAndWithdrawTuple._valid==true) {
-  	assert(false);
-        revert("refundAndWithdraw");
-      }
-  }
-  function checkIllegalRefund() private    {
-      IllegalRefundTuple memory illegalRefundTuple = illegalRefund;
-      if(illegalRefundTuple._valid==true) {
-        assert(false);
-        revert("illegalRefund");
-      }
-  }
-  modifier checkViolations() {
-      // Empty()
-      _;
-      checkMissingFund();
-      checkRefundAndWithdraw();
-      checkIllegalRefund();
   }
   function updateOnceRefundOnInsertConstructor_r13() private    {
       updateRefundAndWithdrawOnInsertOnceRefund_r1(bool(false));
@@ -339,5 +311,15 @@ if (b) {
       uint newValue = updateuintByint(raised.n,_delta);
       updateMissingFundOnInsertRaised_r14(newValue);
       updateIllegalRefundOnInsertRaised_r9(newValue);
+  }
+
+  function checkMissingFund() public view {
+    assert(totalBalance.m == raised.n);
+  }
+  function checkRefundAndWithdraw() public view {
+    assert(!(onceRefund.b && onceWithdraw.b));
+  }
+  function checkIllegalRefund() public view {
+    assert(!(onceRefund.b && raised.n >= target.t));
   }
 }
