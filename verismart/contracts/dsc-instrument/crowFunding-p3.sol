@@ -96,28 +96,28 @@ contract CrowFunding {
         bool b = closed.b;
         return b;
     }
-    function withdraw() public checkMissingFund checkRefundAndWithdraw checkIllegalRefund {
+    function withdraw() public checkIllegalRefund   {
         bool r10 = updateWithdrawOnInsertRecv_withdraw_r10();
         if(r10==false) {
             revert("Rule condition failed");
         }
         transaction = Tx.Withdraw;
     }
-    function close() public checkMissingFund checkRefundAndWithdraw checkIllegalRefund {
+    function close() public checkIllegalRefund   {
         bool r11 = updateClosedOnInsertRecv_close_r11();
         if(r11==false) {
             revert("Rule condition failed");
         }
         transaction = Tx.Close;
     }
-    function invest() public checkMissingFund checkRefundAndWithdraw checkIllegalRefund payable  {
+    function invest() public checkIllegalRefund   payable  {
         bool r5 = updateInvestOnInsertRecv_invest_r5();
         if(r5==false) {
             revert("Rule condition failed");
         }
         transaction = Tx.Invest;
     }
-    function refund() public checkMissingFund checkRefundAndWithdraw checkIllegalRefund {
+    function refund() public checkIllegalRefund   {
         bool r4 = updateRefundOnInsertRecv_refund_r4();
         if(r4==false) {
             revert("Rule condition failed");
@@ -338,13 +338,13 @@ contract CrowFunding {
         updateIllegalRefundOnInsertRaised_r9(newValue);
     }
 
-//    function checkMissingFund() public view {
+//    function checkIllegalRefund() public view {
 //        assert(totalBalance.m == raised.n);
 //    }
-//    function checkRefundAndWithdraw() public view {
+//    function () public view {
 //        assert(!(onceRefund.b && onceWithdraw.b));
 //    }
-//    function checkIllegalRefund() public view {
+//    function () public view {
 //        assert(!(onceRefund.b && raised.n >= target.t));
 //    }
 }

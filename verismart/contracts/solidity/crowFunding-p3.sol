@@ -46,14 +46,14 @@ contract Escrow {
     onceRefund=false;
   }
 
-  function deposit(address p) onlyOwner public check checkRefundWithdraw checkRefundAndRaised payable {
+  function deposit(address p) onlyOwner public checkRefundAndRaised   payable {
     deposits[p] = deposits[p] + msg.value;
     totalFunds += msg.value;
     raised += msg.value;
     transaction = Tx.Deposit;
   }
 
-  function withdraw() public check checkRefundWithdraw checkRefundAndRaised {
+  function withdraw() public checkRefundAndRaised   {
     require(state == State.SUCCESS);
     beneficiary.transfer(address(this).balance);
     totalFunds = 0;
@@ -61,7 +61,7 @@ contract Escrow {
     transaction = Tx.Withdraw;
   }
 
-  function claimRefund(address payable p) public check checkRefundWithdraw checkRefundAndRaised {
+  function claimRefund(address payable p) public checkRefundAndRaised   {
     require(state == State.REFUND);
     uint256 amount = deposits[p];
     deposits[p] = 0;
@@ -72,21 +72,21 @@ contract Escrow {
   }
 
   modifier onlyOwner {require(owner == msg.sender); _; }
-  function close() onlyOwner public check checkRefundWithdraw checkRefundAndRaised {
+  function close() onlyOwner public checkRefundAndRaised   {
     state = State.SUCCESS;
     transaction = Tx.Close;
   }
-  function refund() onlyOwner public check checkRefundWithdraw checkRefundAndRaised {
+  function refund() onlyOwner public checkRefundAndRaised   {
     state = State.REFUND;
     transaction = Tx.Refund;
   }
 //  function check() public view {
 //    assert(totalFunds == raised || state != State.OPEN);
 //  }
-//  function checkRefundWithdraw() public view {
+//  function () public view {
 //     assert(!(onceRefund && onceWithdraw));
 //  }
-//  function checkRefundAndRaised() public view {
+//  function () public view {
 //     assert(!(onceRefund && (raised >= goal)));
 //  }
 }
@@ -138,7 +138,7 @@ contract Escrow {
 //	 }
 //    transaction = Tx.Close;
 //  }
-////  function checkRefundAndRaised() public view {
+////  function () public view {
 ////     assert(!(onceRefund && (raised >= goal)));
 ////  }
 //}

@@ -26,15 +26,21 @@ contract TokenPartition {
       _;
     }
 
-    function issueByPartition(address account, uint256 partition, 
-                              uint256 amount) public onlyOwner {
+    modifier checkInvariant(uint256 partition) {
       require(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
+      _;
+      assert(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
+    }
+
+    function issueByPartition(address account, uint256 partition, 
+                              uint256 amount) public onlyOwner checkInvariant(partition) {
+      // require(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
       require(account!=address(0));
       balanceOfByPartition[account][partition] += amount;
       totalBalanceByPartition[partition] += amount;
       totalSupplyByPartition[partition] += amount;
       emit IssueByPartition(msg.sender, account, partition, amount);
-      assert(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
+      // assert(totalSupplyByPartition[partition] == totalBalanceByPartition[partition]);
     }
 
     function redeemByPartition(address account, uint256 partition,
